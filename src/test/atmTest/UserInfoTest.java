@@ -8,6 +8,9 @@ import org.junit.jupiter.api.Test;
 import ui.AtmMain;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.AssertionsKt;
+
+import java.util.Scanner;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -30,23 +33,17 @@ public class UserInfoTest {
         assertEquals(111111,userInfo.getPassword());
     }
 
+
+
 /*
     @Test
-    void validPasswordTest() {
-        Bank bankName = new Bank("TD");
-        UserInfo userInfo = new UserInfo("jagmeet", "dhillon",
-                "jagmdhi", bankName, 111111);
-    }
-
-
-
-
-    @Test
     void getAcctBalanceTest() {
+        int acct;
         Bank bankName = new Bank("TD");
         UserInfo userInfo = new UserInfo("jagmeet", "dhillon",
                 "jagmdhi", bankName, 111111);
+        assertEquals(0,userInfo.getAcctBalance());
     }
- */
 
+*/
 }

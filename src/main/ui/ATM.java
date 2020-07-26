@@ -30,7 +30,7 @@ public class ATM {
 
 
     public static UserInfo loginScreenPrompt(Bank bank, Scanner scanner) {
-        //initializes the Login Screen
+        //initializes the login variables
         String username;
         int password;
         UserInfo acceptedUser;

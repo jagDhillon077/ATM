@@ -102,10 +102,6 @@ public class UserInfo {
         System.out.println();
     }
 
-    // return the amount of the accounts the user has
-    public int numAccounts() {
-        return this.accounts.size();
-    }
 
 
     // Gets account balance

@@ -48,19 +48,21 @@ public class Account {
 
     }
 
-    /*
-    Get a summary line for the account
-     */
+
+    // Get a summary line for the account
+
     public String getSummaryLine() {
         // get the account's balance
         double balance = this.getBalance();
-        return String.format("Account Number: %s , Balance: $%s , Type of Account: %s", this.uuid, balance, this.type);
+        return String.format("Account Number: %s , Balance: $%s ,"
+                + " Type of Account: %s", this.uuid, balance, this.type);
     }
 
+    // returns balance after transaction is completed
     public double getBalance() {
         double balance = 0;
         for (Transaction t : this.transactions) {
-            balance += t.getAmount();
+            balance = t.getAmount() + balance;
         }
         return balance;
     }
