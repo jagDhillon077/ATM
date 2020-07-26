@@ -49,6 +49,7 @@ public class UserInfo {
         this.accounts = new ArrayList<Account>();
 
         // prints message describing all the user information.
+        // Source - https://matthew-brett.github.io/teaching/string_formatting.html
         System.out.printf("Welcome %s %s, your new user ID %s has been created with pin %s"
                         + "\n and username: %s \n\n",
                 firstName, lastName, uuid, password, username);
@@ -67,32 +68,29 @@ public class UserInfo {
         return this.firstName;
     }
 
+    // returns last name of the user
     public String getLastName() {
         return this.lastName;
     }
 
-    public Bank getBank() {
-        return this.getBank();
-    }
-
+    // returns the users password
     public int getPassword() {
         return this.password;
     }
 
-
-    public String getUuid() {
-        return this.uuid;
-    }
-
+    // produce true if pin matches password in system, false otherwise
     public boolean validPassword(int pin) {
         return pin == password;
     }
 
+    // retrieve user's username
     public String getUsername() {
         return this.username;
     }
 
-
+    // prints the summary of all the accounts associated with the user
+    // Source - https://www.youtube.com/watch?v=k0BofouWX-o
+    // Source - https://matthew-brett.github.io/teaching/string_formatting.html
     public void accountSummary() {
         System.out.printf("\n\n%s's account summary\n", this.firstName);
         for (int i = 0; i < this.accounts.size(); i++) {
@@ -101,7 +99,6 @@ public class UserInfo {
         }
         System.out.println();
     }
-
 
 
     // Gets account balance

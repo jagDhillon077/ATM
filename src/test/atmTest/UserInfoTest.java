@@ -15,12 +15,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class UserInfoTest {
-    private AtmMain testAtmMain;
+
 
     @BeforeEach
     void runBefore() {
-        testAtmMain = new AtmMain();
+
     }
+
 
     @Test
     void userInfoTest() {
@@ -35,15 +36,17 @@ public class UserInfoTest {
 
 
 
-/*
+
     @Test
     void getAcctBalanceTest() {
-        int acct;
+
         Bank bankName = new Bank("TD");
         UserInfo userInfo = new UserInfo("jagmeet", "dhillon",
                 "jagmdhi", bankName, 111111);
-        assertEquals(0,userInfo.getAcctBalance());
+        Account acct = new Account("Savings", 0, bankName, userInfo, "TD");
+        Account account = new Account("Savings",0, bankName, userInfo, "TD");
+        assertEquals(0,userInfo.getAcctBalance((int) acct.getBalance()));
     }
 
-*/
+
 }

@@ -2,6 +2,8 @@ package atm;
 
 import java.util.ArrayList;
 import java.util.UUID;
+// ideas on how to create a bank and account
+// Source - https://www.youtube.com/watch?v=mp1_F7lfmNE
 
 public class Bank {
     // Name of the Bank
@@ -19,11 +21,16 @@ public class Bank {
 
     public Bank(String bankName) {
         this.bankName = bankName;
-        this.accounts = new ArrayList<Account>();
-        this.userList = new ArrayList<UserInfo>();
+        this.accounts = new ArrayList<>();
+        this.userList = new ArrayList<>();
     }
 
+    // UUID Source - https://docs.oracle.com/javase/7/docs/api/
+    // Source # 2 - https://www.baeldung.com/java-uuid#:~:text=The%20randomUUID(
+    // )%20method%20creates,fromString(String%20uuidHexDigitString)%3B
     // Generates a UUID for the user
+    // Source # 3 - https://stackoverflow.com/questions/1389736/how-do-i-create-a-unique-id-in-java
+
     public String getNewUserUUId() {
 
         return universalUniqueID = UUID.randomUUID().toString();
@@ -62,6 +69,9 @@ public class Bank {
 
     }
 
+    // login system that checks if username and password match user credentials, returning user if true, else null
+    // loginService Source -
+    // https://stackoverflow.com/questions/16627910/how-to-code-a-very-simple-login-system-with-java
     public UserInfo loginService(String username, int pin) {
         for (UserInfo passwordProtectedDetails : this.userList) {
             if (passwordProtectedDetails.getUsername().compareTo(username)

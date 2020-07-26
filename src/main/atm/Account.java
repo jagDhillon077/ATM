@@ -3,6 +3,8 @@ package atm;
 
 import java.util.ArrayList;
 // Account that can be accessed and modified by the account owner.
+// ideas on how to create a bank and account
+// Source - https://www.youtube.com/watch?v=mp1_F7lfmNE
 
 public class Account {
 
@@ -31,7 +33,7 @@ public class Account {
         this.uuid = bank.getNewAccountUUId();
 
         // initialize an empty list of transaction
-        this.transactions = new ArrayList<Transaction>();
+        this.transactions = new ArrayList<>();
 
         /* adds the account to the owner and bank lists so account is added and UPDATED to
         UserInfo, Bank, and Account ArrayLists
@@ -50,7 +52,7 @@ public class Account {
 
 
     // Get a summary line for the account
-
+    // Source - https://matthew-brett.github.io/teaching/string_formatting.html
     public String getSummaryLine() {
         // get the account's balance
         double balance = this.getBalance();
@@ -59,6 +61,7 @@ public class Account {
     }
 
     // returns balance after transaction is completed
+
     public double getBalance() {
         double balance = 0;
         for (Transaction t : this.transactions) {

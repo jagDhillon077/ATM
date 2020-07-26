@@ -4,6 +4,15 @@ import atm.Bank;
 import atm.UserInfo;
 
 import java.util.Scanner;
+// ATM that creates an instance with a given account and scans for user inputs
+// For all Variable within String method I used,
+// Source - https://matthew-brett.github.io/teaching/string_formatting.html
+// Got help with the code structure from
+// Source - https://www.sanfoundry.com/java-program-display-atm-transaction/
+// Source - https://www.youtube.com/watch?v=TUN_LhrIaqE
+// Source - https://www.youtube.com/watch?v=k0BofouWX-o
+// Source - https://www.youtube.com/watch?v=wQbEH4tVMJA
+
 
 public class ATM {
     public static void run() {
@@ -23,14 +32,21 @@ public class ATM {
             tryUser = ATM.loginScreenPrompt(bankName, scanner);
 
             // persistently stays in the ATM menu until successful login or quit
+            // Scanner Source = https://www.w3schools.com/java/java_user_input.asp
+            // Source # 2 - https://docs.oracle.com/javase/7/docs/api/java/util/Scanner.html
             ATM.userMenu(tryUser, scanner);
 
         }
     }
 
-
+    // Login Screen of ATM
+    /* Login Ideas Source - https://www.tutorialspoint.com/how-can-we-create-a-login-form-in-java#
+     :~:text=We%20can%20develop%20a%20login,and%20finally%20one%20submit%20button.
+     */
     public static UserInfo loginScreenPrompt(Bank bank, Scanner scanner) {
         //initializes the login variables
+        // local variables Source -
+        // https://intellij-support.jetbrains.com/hc/en-us/community/posts/360000395439-Underlined-variables-
         String username;
         int password;
         UserInfo acceptedUser;
@@ -42,7 +58,7 @@ public class ATM {
             username = scanner.nextLine();
             System.out.println("Enter Password: ");
             password = scanner.nextInt();
-
+            // checks if userInfo in Data is similar to the returned login service details
             acceptedUser = bank.loginService(username, password);
             if (acceptedUser == null) {
                 System.out.println("Please try again, your username and/or password is incorrect");
@@ -53,6 +69,7 @@ public class ATM {
         return acceptedUser;
     }
 
+    // displays user menu with financing options
     public static void userMenu(UserInfo userInfo, Scanner scanner) {
         // show a summary of the users information, name, balance, which accounts
         userInfo.accountSummary();
@@ -71,7 +88,7 @@ public class ATM {
             System.out.println();
             System.out.print("Enter Here: ");
             choice = scanner.nextInt();
-
+            // prevents any mistyped numbers fromo being inputted
             if (1 > choice || choice > 4) {
                 System.out.println("Please choose a choice between the numbers 1-4");
             }
@@ -81,6 +98,7 @@ public class ATM {
         }
     }
 
+    // helper method for userMenu, reads input and excecutes task at hand
     public static void showUserMenu(UserInfo userInfo, Scanner scanner, int choice) {
 
 
@@ -131,19 +149,21 @@ public class ATM {
             }
         } while (toAcct < 0 || toAcct >= 2);
         // Initialize amount
-        System.out.printf("Enter the amount to transfer: ");
+        System.out.println("Enter the amount to transfer: ");
         amount = scanner.nextDouble();
 
         // ready up the transfer for processing
         readyTransfer(userInfo, scanner, fromAcct, toAcct, amount, acctBal);
     }
 
+    // helper method for transferMoney, checks if amount exceeds balance
+    // and decides weather transfer should be made
     public static void readyTransfer(UserInfo userInfo, Scanner scanner, int fromAcct,
                                      int toAcct, double amount, double acctBal) {
         // transfer amount
         do {
-
-
+            System.out.println("Ensure amount must not be greater than Account Balance");
+            amount = scanner.nextDouble();
             if (amount > acctBal) {
                 System.out.println("Amount must not be greater than Account Balance");
             }
@@ -152,6 +172,7 @@ public class ATM {
         makeTransfer(userInfo, scanner, fromAcct, toAcct, amount, acctBal);
     }
 
+    // helper method for transferMoney, makes the transfer
     public static void makeTransfer(UserInfo userInfo, Scanner scanner, int fromAcct,
                                     int toAcct, double amount, double acctBal) {
         //transfer
@@ -216,7 +237,7 @@ public class ATM {
 
         // transfer amount
         do {
-            System.out.printf("Enter the amount to transfer: ");
+            System.out.println("Enter the amount to transfer: ");
             amount = scanner.nextDouble();
             if (amount < 0) {
                 System.out.println("Amount must be greater than 0");
