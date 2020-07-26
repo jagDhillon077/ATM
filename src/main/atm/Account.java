@@ -6,16 +6,78 @@ import java.util.ArrayList;
 
 public class Account {
 
-    // What type of account is this, ie (Chequing, Saving, Emergency...)
+    // What type of account is this, ie (Checking, Saving, Emergency...)
     private String type;
-    // Is a universal way to refer to this account
-    private int accountNumber;
     // Balance in account
     private double balance;
     // Provides the UserInfo of who owns this certain account
     private UserInfo owner;
+    // The accounts Universally Unique Identifier
+    private String uuid;
     // List that remembers the transactions made to and from this account
     private ArrayList<Transaction> transactions;
+
+    /*
+    Creates new Account with Account type, balance, Bank the account is associated with
+    and the account owner
+     */
+    public Account(String type, int balance, Bank bank, UserInfo owner, String bankName) {
+        // sets account type and the owner
+        this.type = type;
+        this.owner = owner;
+        this.balance = balance;
+
+        // gets UUID for account
+        this.uuid = bank.getNewAccountUUId();
+
+        // initialize an empty list of transaction
+        this.transactions = new ArrayList<Transaction>();
+
+        /* adds the account to the owner and bank lists so account is added and UPDATED to
+        UserInfo, Bank, and Account ArrayLists
+        this in the add account parameter refers to "this" account being
+        created by the constructor
+         */
+        owner.addAccount(this);
+        bank.addAccount(this);
+
+        // prints message describing all the account information.
+        System.out.printf(
+                "Your %s account has been created with %s bank with %s balance and a UUID of %s.\n",
+                type, bankName, balance, uuid);
+
+    }
+
+    /*
+    Get a summary line for the account
+     */
+    public String getSummaryLine() {
+        // get the account's balance
+        double balance = this.getBalance();
+        return String.format("%s : $%s : %s", this.uuid, balance, this.type);
+    }
+
+    public double getBalance() {
+        return balance;
+
+    }
+
+    /*
+    Print transaction history of the account
+     */
+    public void printTransactionHistory() {
+        System.out.printf("\nTransaction history for account %s\n", this.uuid);
+        for (int t = this.transactions.size() - 1; t >= 0; t--) {
+            System.out.printf(this.transactions.get(t).getSummaryLine());
+        }
+        System.out.println();
+    }
+
+    public void addTransaction(double amount) {
+        // create transaction object and add to list
+        Transaction newTransaction = new Transaction(amount, this);
+        this.transactions.add(newTransaction);
+    }
 
 
 }

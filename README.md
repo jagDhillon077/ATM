@@ -18,3 +18,8 @@ I would be able to visualize what is actually going on under the hood.
 - As a user, I want to be able to logout of the atm.
 - As a user, I want to be able to make transfers in between accounts of an atm.
 
+
+
+### 
+Learned about and implemented UUID's (Universally Unique Identifier)in this project. Learnt from
+https://www.baeldung.com/java-uuid#:~:text=The%20randomUUID()%20method%20creates,fromString(String%20uuidHexDigitString)%3B 
