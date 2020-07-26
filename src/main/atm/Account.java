@@ -43,7 +43,7 @@ public class Account {
 
         // prints message describing all the account information.
         System.out.printf(
-                "Your %s account has been created with %s bank with %s balance and a UUID of %s.\n",
+                "Your %s account has been created with %s bank with %s balance and a UUID of %s.\n\n",
                 type, bankName, balance, uuid);
 
     }

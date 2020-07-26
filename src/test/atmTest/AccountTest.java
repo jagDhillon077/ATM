@@ -16,7 +16,7 @@ public class AccountTest {
     }
 
     @Test
-    void accountSummaryTest() {
+    void getSummaryLineTest() {
 
     }
 
@@ -25,9 +25,5 @@ public class AccountTest {
 
     }
 
-    @Test
-    void addTransactionTest() {
-
-    }
 
 }

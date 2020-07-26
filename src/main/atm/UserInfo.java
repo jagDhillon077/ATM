@@ -49,8 +49,9 @@ public class UserInfo {
         this.accounts = new ArrayList<Account>();
 
         // prints message describing all the user information.
-        System.out.printf("Welcome %s %s, your new user ID %s has been created with pin %s.\n",
-                firstName, lastName, uuid, password);
+        System.out.printf("Welcome %s %s, your new user ID %s has been created with pin %s"
+                        + "\n and username: %s \n\n",
+                firstName, lastName, uuid, password, username);
 
 
     }
@@ -64,6 +65,18 @@ public class UserInfo {
     // Returns Users First Name
     public String getFirstName() {
         return this.firstName;
+    }
+
+    public String getLastName() {
+        return this.lastName;
+    }
+
+    public Bank getBank() {
+        return this.getBank();
+    }
+
+    public int getPassword() {
+        return this.password;
     }
 
 
@@ -93,7 +106,6 @@ public class UserInfo {
     public int numAccounts() {
         return this.accounts.size();
     }
-
 
 
     // Gets account balance
