@@ -25,16 +25,17 @@ public class UserInfo {
     // List of Accounts that are owned by the user
     private ArrayList<Account> accounts;
 
-    /* set user's information
-    information includes the following
-    - first name
-    - last name
-    - username
-    - password
-    - uuid
-    - empty list of accounts
-     */
 
+    // REQUIRES:
+    // MODIFIES: this
+    // EFFECTS: set user's information
+    //    information includes the following
+    //    - first name
+    //    - last name
+    //    - username
+    //    - password
+    //    - uuid
+    //    - empty list of accounts
     public UserInfo(String firstName, String lastName, String username, Bank userBank, int password) {
         // initialize user fields
         this.firstName = firstName;
@@ -58,7 +59,9 @@ public class UserInfo {
     }
 
 
-    // Adds account to list of accounts associated with just the user
+    // REQUIRES: Account
+    // MODIFIES: this
+    // EFFECTS: Adds account to the list of accounts associated with this user
     public void addAccount(Account newAccount) {
         this.accounts.add(newAccount);
     }
@@ -78,7 +81,9 @@ public class UserInfo {
         return this.password;
     }
 
-    // produce true if pin matches password in system, false otherwise
+
+    // REQUIRES: pin
+    // EFFECTS: produce true if pin matches password in system, false otherwise
     public boolean validPassword(int pin) {
         return pin == password;
     }
@@ -88,9 +93,10 @@ public class UserInfo {
         return this.username;
     }
 
-    // prints the summary of all the accounts associated with the user
     // Source - https://www.youtube.com/watch?v=k0BofouWX-o
     // Source - https://matthew-brett.github.io/teaching/string_formatting.html
+    // REQUIRES: Account
+    // EFFECTS: prints a summary of all the accounts associated with the user
     public void accountSummary() {
         System.out.printf("\n\n%s's account summary\n", this.firstName);
         for (int i = 0; i < this.accounts.size(); i++) {
@@ -106,7 +112,10 @@ public class UserInfo {
         return this.accounts.get(acct).getBalance();
     }
 
-    // Adds transaction to selected account
+
+    // REQUIRES: transaction
+    // MODIFIES this
+    // EFFECTS: Adds transaction to selected account
     public void addAcctTransaction(int acct, double amount) {
         this.accounts.get(acct).addTransaction(amount);
     }

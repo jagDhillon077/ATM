@@ -15,10 +15,10 @@ public class Bank {
     // unique ID given out to all accounts and Users
     private String universalUniqueID;
 
-    /* Creates new Bank with bank name and an empty list of all
-     the accounts in the bank and the users
-     */
 
+    // MODIFIES: this
+    // EFFECTS:  Creates new Bank with bank name and an empty list of all
+    //     the accounts in the bank and the user
     public Bank(String bankName) {
         this.bankName = bankName;
         this.accounts = new ArrayList<>();
@@ -30,24 +30,26 @@ public class Bank {
     // )%20method%20creates,fromString(String%20uuidHexDigitString)%3B
     // Generates a UUID for the user
     // Source # 3 - https://stackoverflow.com/questions/1389736/how-do-i-create-a-unique-id-in-java
-
     public String getNewUserUUId() {
-
         return universalUniqueID = UUID.randomUUID().toString();
     }
+
 
     // Generates a UUID for the account
     public String getNewAccountUUId() {
-
         return universalUniqueID = UUID.randomUUID().toString();
     }
 
-    // adds account to Bank's accounts ArrayList
+    // REQUIRES: Account
+    // MODIFIES: this
+    // EFFECTS: adds account to Bank's accounts ArrayList
     public void addAccount(Account newAccount) {
         this.accounts.add(newAccount);
     }
 
-    /* creates new user with:
+
+    // MODIFIES: this
+    /* EFFECTS: creates a new user with
     - first name
     - last name
     - username
@@ -72,6 +74,9 @@ public class Bank {
     // login system that checks if username and password match user credentials, returning user if true, else null
     // loginService Source -
     // https://stackoverflow.com/questions/16627910/how-to-code-a-very-simple-login-system-with-java
+    // REQUIRES: String and Pin for User
+    // EFFECTS: Allowed login of a user if the string and pin match any of string and pin combinations in
+    // system
     public UserInfo loginService(String username, int pin) {
         for (UserInfo passwordProtectedDetails : this.userList) {
             if (passwordProtectedDetails.getUsername().compareTo(username)

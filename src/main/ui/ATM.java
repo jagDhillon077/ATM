@@ -7,14 +7,19 @@ import java.util.Scanner;
 // ATM that creates an instance with a given account and scans for user inputs
 // For all Variable within String method I used,
 // Source - https://matthew-brett.github.io/teaching/string_formatting.html
-// Got help with the code structure from
+// Got ideas/help with the code structure from
 // Source - https://www.sanfoundry.com/java-program-display-atm-transaction/
 // Source - https://www.youtube.com/watch?v=TUN_LhrIaqE
 // Source - https://www.youtube.com/watch?v=k0BofouWX-o
 // Source - https://www.youtube.com/watch?v=wQbEH4tVMJA
+// Source - https://www.youtube.com/watch?v=DiA504r_L7k
+// Source - https://www.youtube.com/watch?v=0nDYk8sV_jQ
 
 
 public class ATM {
+    // MODIFIES: this
+    // EFFECTS: creates an instance of an ATM that starts at the login screen and scans for
+    // correct username/password combo
     public static void run() {
         // creates a scanner to scan the inputs
         Scanner scanner = new Scanner(System.in);
@@ -39,10 +44,10 @@ public class ATM {
         }
     }
 
-    // Login Screen of ATM
     /* Login Ideas Source - https://www.tutorialspoint.com/how-can-we-create-a-login-form-in-java#
      :~:text=We%20can%20develop%20a%20login,and%20finally%20one%20submit%20button.
      */
+    // EFFECTS: Shows the Login screen of ATM
     public static UserInfo loginScreenPrompt(Bank bank, Scanner scanner) {
         //initializes the login variables
         // local variables Source -
@@ -69,7 +74,8 @@ public class ATM {
         return acceptedUser;
     }
 
-    // displays user menu with financing options
+    // REQUIRES: Correct login for user
+    // EFFECTS: show summary of user information and asks the user what financial option to proceed with
     public static void userMenu(UserInfo userInfo, Scanner scanner) {
         // show a summary of the users information, name, balance, which accounts
         userInfo.accountSummary();
@@ -98,7 +104,8 @@ public class ATM {
         }
     }
 
-    // helper method for userMenu, reads input and excecutes task at hand
+    // REQUIRES: choice to be between 1-4 Inclusive
+    // EFFECTS: opens up a prompt depending on user selection (withdraw, deposit, transfer, quit)
     public static void showUserMenu(UserInfo userInfo, Scanner scanner, int choice) {
 
 
@@ -118,6 +125,10 @@ public class ATM {
 
 
     // Transfer money from one selected account to the other
+    // REQUIRES: User and amount
+    // MODIFIES: this
+    // EFFECTS: selects a fromAccount, then a toAccount,
+    // and asks how much user would like to transfer in between accounts
     public static void transferMoney(UserInfo userInfo, Scanner scanner) {
 
         // initialize the fields that would be to and account, from an account,
@@ -156,13 +167,15 @@ public class ATM {
         readyTransfer(userInfo, scanner, fromAcct, toAcct, amount, acctBal);
     }
 
-    // helper method for transferMoney, checks if amount exceeds balance
-    // and decides weather transfer should be made
+
+    // REQUIRES: transferMoney to call this helper
+    // EFFECTS: makes sure the amount being transferred is less than or equal to the balance
     public static void readyTransfer(UserInfo userInfo, Scanner scanner, int fromAcct,
                                      int toAcct, double amount, double acctBal) {
         // transfer amount
         do {
-            System.out.println("Ensure amount must not be greater than Account Balance");
+
+            System.out.println("Ensure amount must not be greater than Account Balance, retype to confirm or correct");
             amount = scanner.nextDouble();
             if (amount > acctBal) {
                 System.out.println("Amount must not be greater than Account Balance");
@@ -172,7 +185,9 @@ public class ATM {
         makeTransfer(userInfo, scanner, fromAcct, toAcct, amount, acctBal);
     }
 
-    // helper method for transferMoney, makes the transfer
+    // REQUIRES: transferMoney to call this helper function
+    // MODIFIES: this
+    // EFFECTS: makes the transfer in between accounts
     public static void makeTransfer(UserInfo userInfo, Scanner scanner, int fromAcct,
                                     int toAcct, double amount, double acctBal) {
         //transfer
@@ -181,7 +196,10 @@ public class ATM {
     }
 
 
-    // withdraws money from selected user account
+
+    // REQUIRES: fromAcct > amount and a call from the financial interface
+    // MODIFIES: selected user account
+    // EFFECTS: withdraws money from selected user account
     public static void withdrawMoney(UserInfo userInfo, Scanner scanner) {
 
         int fromAcct;
@@ -216,7 +234,9 @@ public class ATM {
         userInfo.addAcctTransaction(fromAcct, -1 * amount);
     }
 
-    // deposits money into the account
+    // REQUIRES: amount > 0
+    // MODIFIES: account being deposited into
+    // EFFECTS: deposits amount into the bank account
     public static void depositMoney(UserInfo userInfo, Scanner scanner) {
 
         int toAcct;

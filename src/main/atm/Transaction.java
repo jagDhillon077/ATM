@@ -8,10 +8,9 @@ public class Transaction {
     private Account whichAccount;
 
 
-    /*
-    Creates new Transaction with transaction about and which account the transaction
-    is associated with
-     */
+    // MODIFIES: this
+    // EFFECTS: Creates a transaction that has an amount and tells which account the
+    // transaction is associated with
     public Transaction(double transactionAmount, Account whichAccount) {
         this.transactionAmount = transactionAmount;
         this.whichAccount = whichAccount;

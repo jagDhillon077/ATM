@@ -6,6 +6,7 @@ import java.util.ArrayList;
 // ideas on how to create a bank and account
 // Source - https://www.youtube.com/watch?v=mp1_F7lfmNE
 
+
 public class Account {
 
     // What type of account is this, ie (Checking, Saving, Emergency...)
@@ -23,6 +24,8 @@ public class Account {
     Creates new Account with Account type, balance, Bank the account is associated with
     and the account owner
      */
+    // MODIFIES: this
+    // EFFECTS: creates an Account (Checking or Saving), with balance, owner of account, UUID, and list of Transactions
     public Account(String type, int balance, Bank bank, UserInfo owner, String bankName) {
         // sets account type and the owner
         this.type = type;
@@ -44,15 +47,18 @@ public class Account {
         bank.addAccount(this);
 
         // prints message describing all the account information.
+        // Source - https://matthew-brett.github.io/teaching/string_formatting.html
         System.out.printf(
-                "Your %s account has been created with %s bank with %s balance and a UUID of %s.\n\n",
+                "Your %s account has been created with %s bank "
+                        + "with %s balance and a UUID of %s.\n\n",
                 type, bankName, balance, uuid);
 
     }
 
 
-    // Get a summary line for the account
     // Source - https://matthew-brett.github.io/teaching/string_formatting.html
+    // REQUIRES: account
+    // EFFECTS: prints a summary of the details of the account
     public String getSummaryLine() {
         // get the account's balance
         double balance = this.getBalance();
@@ -61,7 +67,6 @@ public class Account {
     }
 
     // returns balance after transaction is completed
-
     public double getBalance() {
         double balance = 0;
         for (Transaction t : this.transactions) {
@@ -70,9 +75,10 @@ public class Account {
         return balance;
     }
 
-
+    // REQUIRES: account
+    // MODIFIES: this
+    // EFFECTS: adds a transaction to the list of transactions of an Account
     public void addTransaction(double amount) {
-        // create transaction object and add to list
         Transaction newTransaction = new Transaction(amount, this);
         this.transactions.add(newTransaction);
     }
