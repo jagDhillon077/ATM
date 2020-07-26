@@ -69,7 +69,7 @@ public class Bank {
 
     public UserInfo loginService(String username, int pin) {
         for (UserInfo user : this.userList) {
-            if (user.getUuid().compareTo(username) == 0 && user.validPassword(pin)) {
+            if (user.getUsername().compareTo(username) == 0 && user.validPassword(pin)) {
                 return user;
             }
         }

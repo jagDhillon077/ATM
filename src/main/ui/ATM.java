@@ -1,6 +1,5 @@
 package ui;
 
-import atm.Account;
 import atm.Bank;
 import atm.UserInfo;
 
@@ -24,7 +23,7 @@ public class ATM {
             tryUser = ATM.loginScreenPrompt(bankName, scanner);
 
             // persistently stays in the ATM menu until successful login or quit
-            ATM.showUserMenu(tryUser, scanner);
+            ATM.userMenu(tryUser, scanner);
 
         }
     }
@@ -54,7 +53,7 @@ public class ATM {
         return acceptedUser;
     }
 
-    public static void showUserMenu(UserInfo userInfo, Scanner scanner) {
+    public static void userMenu(UserInfo userInfo, Scanner scanner) {
         // show a summary of the users information, name, balance, which accounts
         userInfo.accountSummary();
 
@@ -63,13 +62,13 @@ public class ATM {
 
         // initialize user menu
         do {
-            System.out.printf("Welcome %s, please choose from the set of options",
+            System.out.printf("Welcome %s, please choose from the set of options\n",
                     userInfo.getFirstName());
             System.out.println("1) Show History");
             System.out.println("2) Withdraw");
             System.out.println("3) Deposit");
-            System.out.println("5) Transfer between accounts");
-            System.out.println("4) Exit");
+            System.out.println("4) Transfer between accounts");
+            System.out.println("5) Exit");
             System.out.println();
             System.out.print("Enter Here: ");
             choice = scanner.nextInt();
@@ -78,10 +77,17 @@ public class ATM {
                 System.out.println("Please choose a choice between the numbers 1-5");
             }
         } while (choice < 1 || choice > 5);
+        if (choice >= 1 || choice <= 5) {
+            showUserMenu(userInfo, scanner, choice);
+        }
+    }
+
+    public static void showUserMenu(UserInfo userInfo, Scanner scanner, int choice) {
+
 
         // retrieve info from choice 1-5
         if (choice == 1) {
-            ATM.transactionhistory(userInfo, scanner);
+            ATM.transactionHistory(userInfo, scanner);
         } else if (choice == 2) {
             ATM.withdrawMoney(userInfo, scanner);
         } else if (choice == 3) {
@@ -91,7 +97,7 @@ public class ATM {
         }
         // keeps the user display
         if (choice != 5) {
-            ATM.showUserMenu(userInfo, scanner);
+            ATM.userMenu(userInfo, scanner);
         }
     }
 
@@ -99,7 +105,7 @@ public class ATM {
     Displays transaction history of the account
      */
 
-    public static void transactionhistory(UserInfo userInfo, Scanner scanner) {
+    public static void transactionHistory(UserInfo userInfo, Scanner scanner) {
         int theAcct;
         //select an account to look at its history
         do {
@@ -148,20 +154,35 @@ public class ATM {
                 System.out.println("Invalid Account entered. Please try again.");
             }
         } while ((toAcct < 0 || toAcct >= userInfo.numAccounts()));
+        // Initialize amount
+        amount = scanner.nextDouble();
+        // ready up the transfer for processing
+        readyTransfer(userInfo, scanner, fromAcct, toAcct, amount, acctBal);
+    }
 
+    public static void readyTransfer(UserInfo userInfo, Scanner scanner, int fromAcct,
+                                     int toAcct, double amount, double acctBal) {
         // transfer amount
         do {
             System.out.printf("Enter the amount to transfer: ");
-            amount = scanner.nextDouble();
+
             if (amount > acctBal) {
                 System.out.println("Amount must not be greater than Account Balance");
             }
         } while (amount > acctBal);
 
+        makeTransfer(userInfo, scanner, fromAcct, toAcct, amount, acctBal);
+    }
+
+    public static void makeTransfer(UserInfo userInfo, Scanner scanner, int fromAcct,
+                                    int toAcct, double amount, double acctBal) {
         //transfer
         userInfo.addAcctTransaction(fromAcct, -1 * amount);
         userInfo.addAcctTransaction(toAcct, amount);
     }
+
+
+
 
     // withdraws money from selected user account
     public static void withdrawMoney(UserInfo userInfo, Scanner scanner) {

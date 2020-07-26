@@ -72,12 +72,16 @@ public class UserInfo {
     }
 
     public boolean validPassword(int pin) {
-        return pin == 111111;
+        return pin == password;
+    }
+
+    public String getUsername() {
+        return this.username;
     }
 
 
     public void accountSummary() {
-        System.out.printf("\n\n%s's account summary", this.firstName);
+        System.out.printf("\n\n%s's account summary\n", this.firstName);
         for (int i = 0; i < this.accounts.size(); i++) {
             System.out.printf("%d) %s\n", i + 1,
                     this.accounts.get(i).getSummaryLine());
