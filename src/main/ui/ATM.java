@@ -142,6 +142,7 @@ public class ATM {
             if (fromAcct < 0 || fromAcct >= userInfo.numAccounts()) {
                 System.out.println("Invalid Account entered. Please try again.");
             }
+
         } while ((fromAcct < 0 || fromAcct >= userInfo.numAccounts()));
         acctBal = userInfo.getAcctBalance(fromAcct);
 
