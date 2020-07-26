@@ -18,15 +18,10 @@ public class Transaction {
 
     }
 
-    /*
-    Creates a summary of the transaction
-     */
-    public String getSummaryLine() {
-        if (this.transactionAmount >= 0) {
-            return String.format("$%s", this.transactionAmount);
-        } else {
-            return String.format("$%s were withdrawn", this.transactionAmount);
-        }
+
+    // Get the amount of the transaction
+    public double getAmount() {
+        return this.transactionAmount;
     }
 
 

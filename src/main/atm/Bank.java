@@ -35,12 +35,6 @@ public class Bank {
         return universalUniqueID = UUID.randomUUID().toString();
     }
 
-    // Returns Bank name
-    public String getName() {
-        return this.bankName;
-    }
-
-
     // adds account to Bank's accounts ArrayList
     public void addAccount(Account newAccount) {
         this.accounts.add(newAccount);
@@ -60,8 +54,9 @@ public class Bank {
 
         // create a checking account for the user
         Account newAccount = new Account("Checking", 0, this, newUser, bankName);
-        newUser.addAccount(newAccount);
+        Account newAccount2 = new Account("Saving", 0, this, newUser, bankName);
         this.addAccount(newAccount);
+        this.addAccount(newAccount2);
 
         return newUser;
 

@@ -64,20 +64,19 @@ public class ATM {
         do {
             System.out.printf("Welcome %s, please choose from the set of options\n",
                     userInfo.getFirstName());
-            System.out.println("1) Show History");
-            System.out.println("2) Withdraw");
-            System.out.println("3) Deposit");
-            System.out.println("4) Transfer between accounts");
-            System.out.println("5) Exit");
+            System.out.println("1) Withdraw");
+            System.out.println("2) Deposit");
+            System.out.println("3) Transfer between accounts");
+            System.out.println("4) Exit");
             System.out.println();
             System.out.print("Enter Here: ");
             choice = scanner.nextInt();
 
-            if (1 > choice || choice > 5) {
-                System.out.println("Please choose a choice between the numbers 1-5");
+            if (1 > choice || choice > 4) {
+                System.out.println("Please choose a choice between the numbers 1-4");
             }
-        } while (choice < 1 || choice > 5);
-        if (choice >= 1 || choice <= 5) {
+        } while (choice < 1 || choice > 4);
+        if (choice >= 1 || choice <= 4) {
             showUserMenu(userInfo, scanner, choice);
         }
     }
@@ -87,41 +86,18 @@ public class ATM {
 
         // retrieve info from choice 1-5
         if (choice == 1) {
-            ATM.transactionHistory(userInfo, scanner);
-        } else if (choice == 2) {
             ATM.withdrawMoney(userInfo, scanner);
-        } else if (choice == 3) {
+        } else if (choice == 2) {
             ATM.depositMoney(userInfo, scanner);
-        } else if (choice == 4) {
+        } else if (choice == 3) {
             ATM.transferMoney(userInfo, scanner);
         }
-        // keeps the user display
-        if (choice != 5) {
+        if (choice != 4) {
+            // keeps the user display
             ATM.userMenu(userInfo, scanner);
         }
     }
 
-    /*
-    Displays transaction history of the account
-     */
-
-    public static void transactionHistory(UserInfo userInfo, Scanner scanner) {
-        int theAcct;
-        //select an account to look at its history
-        do {
-            System.out.printf("Enter the number (1-%d) of the account/n"
-                            + "whose transaction you want to see: ",
-                    userInfo.numAccounts());
-            theAcct = scanner.nextInt() - 1;
-            if (theAcct < 0 || theAcct >= userInfo.numAccounts()) {
-                System.out.println("Invalid Account entered. Please try again.");
-            }
-
-        } while (theAcct < 0 || theAcct >= userInfo.numAccounts());
-
-        //print history
-        userInfo.printAccountHistory(theAcct);
-    }
 
     // Transfer money from one selected account to the other
     public static void transferMoney(UserInfo userInfo, Scanner scanner) {
@@ -136,27 +112,28 @@ public class ATM {
 
         // get the account to transfer from
         do {
-            System.out.printf("Enter the number from (1-%d) of the account\n"
-                    + "to transfer from: ");
+            System.out.println("Enter the number from (1-2) of the account\n to transfer from: ");
             fromAcct = scanner.nextInt() - 1;
-            if (fromAcct < 0 || fromAcct >= userInfo.numAccounts()) {
+            if (fromAcct < 0 || fromAcct >= 2) {
                 System.out.println("Invalid Account entered. Please try again.");
             }
 
-        } while ((fromAcct < 0 || fromAcct >= userInfo.numAccounts()));
+        } while ((fromAcct < 0 || fromAcct >= 2));
         acctBal = userInfo.getAcctBalance(fromAcct);
 
         //get account to transfer too
         do {
-            System.out.printf("Enter the number from (1-%d) of the account\n"
+            System.out.println("Enter the number from (1-2) of the account\n"
                     + "to transfer to: ");
             toAcct = scanner.nextInt() - 1;
-            if (toAcct < 0 || toAcct >= userInfo.numAccounts()) {
+            if (toAcct < 0 || toAcct >= 2) {
                 System.out.println("Invalid Account entered. Please try again.");
             }
-        } while ((toAcct < 0 || toAcct >= userInfo.numAccounts()));
+        } while (toAcct < 0 || toAcct >= 2);
         // Initialize amount
+        System.out.printf("Enter the amount to transfer: ");
         amount = scanner.nextDouble();
+
         // ready up the transfer for processing
         readyTransfer(userInfo, scanner, fromAcct, toAcct, amount, acctBal);
     }
@@ -165,7 +142,7 @@ public class ATM {
                                      int toAcct, double amount, double acctBal) {
         // transfer amount
         do {
-            System.out.printf("Enter the amount to transfer: ");
+
 
             if (amount > acctBal) {
                 System.out.println("Amount must not be greater than Account Balance");
@@ -183,8 +160,6 @@ public class ATM {
     }
 
 
-
-
     // withdraws money from selected user account
     public static void withdrawMoney(UserInfo userInfo, Scanner scanner) {
 
@@ -194,20 +169,20 @@ public class ATM {
         double amount;
 
 
-        // get the account to transfer from
+        // get the account to withdraw from
         do {
-            System.out.printf("Enter the number from (1-%d) of the account\n"
-                    + "to transfer from: ");
+            System.out.println("Enter the number from (1-2) of the account\n"
+                    + "to withdraw from: ");
             fromAcct = scanner.nextInt() - 1;
-            if (fromAcct < 0 || fromAcct >= userInfo.numAccounts()) {
+            if (fromAcct < 0 || fromAcct >= 2) {
                 System.out.println("Invalid Account entered. Please try again.");
             }
-        } while ((fromAcct < 0 || fromAcct >= userInfo.numAccounts()));
+        } while (fromAcct < 0 || fromAcct >= 2);
         acctBal = userInfo.getAcctBalance(fromAcct);
 
         // transfer amount
         do {
-            System.out.printf("Enter the amount to transfer: ");
+            System.out.println("Enter the amount to withdraw: ");
             amount = scanner.nextDouble();
             if (amount > acctBal) {
                 System.out.println("Amount must not be greater than Account Balance");
@@ -228,29 +203,29 @@ public class ATM {
         double amount;
 
 
-        // get the account to transfer from
+        // get the account to deposit to
         do {
-            System.out.printf("Enter the number from (1-%d) of the account\n"
-                    + "to transfer from: ");
+            System.out.println("Enter the number from (1-2) of the account\n"
+                    + "to deposit to: ");
             toAcct = scanner.nextInt() - 1;
-            if (toAcct < 0 || toAcct >= userInfo.numAccounts()) {
+            if (toAcct < 0 || toAcct >= 2) {
                 System.out.println("Invalid Account entered. Please try again.");
             }
-        } while ((toAcct < 0 || toAcct >= userInfo.numAccounts()));
+        } while (toAcct < 0 || toAcct >= 2);
         acctBal = userInfo.getAcctBalance(toAcct);
 
         // transfer amount
         do {
             System.out.printf("Enter the amount to transfer: ");
             amount = scanner.nextDouble();
-            if (amount > acctBal) {
-                System.out.println("Amount must not be greater than Account Balance");
+            if (amount < 0) {
+                System.out.println("Amount must be greater than 0");
             }
-        } while (amount > acctBal);
+        } while (amount < 0);
 
         scanner.nextLine();
 
-        // make withdrawal
+        // make deposit
         userInfo.addAcctTransaction(toAcct, amount);
 
     }

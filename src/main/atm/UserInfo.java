@@ -94,20 +94,14 @@ public class UserInfo {
         return this.accounts.size();
     }
 
-    /*
-    Print transaction history for selected account
-     */
-    public void printAccountHistory(int acct) {
-        this.accounts.get(acct).printTransactionHistory();
-    }
 
-    /*
-    Gets account balance
-     */
+
+    // Gets account balance
     public double getAcctBalance(int acct) {
         return this.accounts.get(acct).getBalance();
     }
 
+    // Adds transaction to selected account
     public void addAcctTransaction(int acct, double amount) {
         this.accounts.get(acct).addTransaction(amount);
     }

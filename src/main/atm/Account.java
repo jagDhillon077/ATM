@@ -54,24 +54,17 @@ public class Account {
     public String getSummaryLine() {
         // get the account's balance
         double balance = this.getBalance();
-        return String.format("%s : $%s : %s", this.uuid, balance, this.type);
+        return String.format("Account Number: %s , Balance: $%s , Type of Account: %s", this.uuid, balance, this.type);
     }
 
     public double getBalance() {
-        return balance;
-
-    }
-
-    /*
-    Print transaction history of the account
-     */
-    public void printTransactionHistory() {
-        System.out.printf("\nTransaction history for account %s\n", this.uuid);
-        for (int t = this.transactions.size() - 1; t >= 0; t--) {
-            System.out.printf(this.transactions.get(t).getSummaryLine());
+        double balance = 0;
+        for (Transaction t : this.transactions) {
+            balance += t.getAmount();
         }
-        System.out.println();
+        return balance;
     }
+
 
     public void addTransaction(double amount) {
         // create transaction object and add to list
