@@ -14,6 +14,8 @@ I would be able to visualize what is actually going on under the hood.
 ##User Stories:
 
 - As a user, I want to be able make an account.
-- As a user, I want to be able to deposit and withdraw from my atm.
-- As a user, I want to be able to logout of the atm.
+- As a user, I want to be greeted by the atm and for the atm to give details about my account once created.
+- As a user, I want to be able to deposit into my checking or savings account.
+- As a user, I want to be able to withdraw into my checking or savings account.
 - As a user, I want to be able to make transfers in between accounts of an atm.
+- As a user, I want to be able logout
