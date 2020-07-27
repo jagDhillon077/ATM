@@ -75,6 +75,7 @@ public class Account {
         return balance;
     }
 
+    // Source - https://www.youtube.com/watch?v=k0BofouWX-o
     // REQUIRES: account
     // MODIFIES: this
     // EFFECTS: adds a transaction to the list of transactions of an Account
