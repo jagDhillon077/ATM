@@ -86,6 +86,8 @@ public class ATM {
 
         // initialize user menu
         do {
+            System.out.println("********************************************************"
+                    + "******************************************************************");
             System.out.printf("Welcome %s, please choose from the set of options\n",
                     userInfo.getFirstName());
             System.out.println("1) Withdraw");
@@ -94,6 +96,8 @@ public class ATM {
             System.out.println("4) Exit");
             System.out.println();
             System.out.print("Enter Here: ");
+            System.out.println("\n********************************************************"
+                    + "******************************************************************");
             choice = scanner.nextInt();
             // prevents any mistyped numbers fromo being inputted
             if (1 > choice || choice > 4) {
