@@ -67,6 +67,7 @@ public class ATM {
             acceptedUser = bank.loginService(username, password);
             if (acceptedUser == null) {
                 System.out.println("Please try again, your username and/or password is incorrect");
+                run();
             }
 
         } while (acceptedUser == null); //screen does not change until correct login attempt
@@ -120,6 +121,8 @@ public class ATM {
         if (choice != 4) {
             // keeps the user display
             ATM.userMenu(userInfo, scanner);
+        } else if (choice == 4) {
+            run();
         }
     }
 
@@ -175,7 +178,7 @@ public class ATM {
         // transfer amount
         do {
 
-            System.out.println("Ensure amount must not be greater than Account Balance, retype to confirm or correct");
+            System.out.println("Retype amount to confirm,\n Ensure amount is not greater than account balance");
             amount = scanner.nextDouble();
             if (amount > acctBal) {
                 System.out.println("Amount must not be greater than Account Balance");
@@ -194,7 +197,6 @@ public class ATM {
         userInfo.addAcctTransaction(fromAcct, -1 * amount);
         userInfo.addAcctTransaction(toAcct, amount);
     }
-
 
 
     // REQUIRES: fromAcct > amount and a call from the financial interface
