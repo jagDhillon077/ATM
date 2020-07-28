@@ -109,6 +109,7 @@ public class ATM {
         }
     }
 
+
     // REQUIRES: choice to be between 1-4 Inclusive
     // EFFECTS: opens up a prompt depending on user selection (withdraw, deposit, transfer, quit)
     public static void showUserMenu(UserInfo userInfo, Scanner scanner, int choice) {
