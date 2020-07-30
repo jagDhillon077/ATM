@@ -31,12 +31,11 @@ public class Account {
         this.type = type;
         this.owner = owner;
         this.balance = balance;
-
         // gets UUID for account
         this.uuid = bank.getNewAccountUUId();
 
-        // initialize an empty list of transaction
-        this.transactions = new ArrayList<>();
+        // initialize an empty list of transaction (Probably don't need)
+        // this.transactions = new ArrayList<>();
 
         /* adds the account to the owner and bank lists so account is added and UPDATED to
         UserInfo, Bank, and Account ArrayLists
@@ -54,6 +53,24 @@ public class Account {
                 type, bankName, balance, uuid);
 
     }
+
+    public String getAccountType() {
+        return type;
+    }
+
+    public double getAccountBalance() {
+        return balance;
+    }
+
+    public String getAccountUUId() {
+        return uuid;
+    }
+
+    public UserInfo getUser() {
+        return owner;
+    }
+    
+
 
 
     // Source - https://matthew-brett.github.io/teaching/string_formatting.html
