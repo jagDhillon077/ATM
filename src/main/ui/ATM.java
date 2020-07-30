@@ -29,7 +29,9 @@ public class ATM {
 
         // creates user with savings accounts
         UserInfo user =
-                bankName.newUser("Jagmeet", "Dhillon", "jagmdhi", 111111);
+                bankName.newUser("Jagmeet",
+                        "Dhillon", "12345", 111111);
+
 
         UserInfo tryUser;
         while (true) {
@@ -99,14 +101,13 @@ public class ATM {
             System.out.println("\n********************************************************"
                     + "******************************************************************");
             choice = scanner.nextInt();
-            // prevents any mistyped numbers fromo being inputted
+            // prevents any mistyped numbers from being inputted
             if (1 > choice || choice > 4) {
                 System.out.println("Please choose a choice between the numbers 1-4");
             }
         } while (choice < 1 || choice > 4);
-        if (choice >= 1 || choice <= 4) {
-            showUserMenu(userInfo, scanner, choice);
-        }
+        showUserMenu(userInfo, scanner, choice);
+
     }
 
 

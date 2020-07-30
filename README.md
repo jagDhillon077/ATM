@@ -18,4 +18,6 @@ I would be able to visualize what is actually going on under the hood.
 - As a user, I want to be able to deposit into my checking or savings account.
 - As a user, I want to be able to withdraw into my checking or savings account.
 - As a user, I want to be able to make transfers in between accounts of an atm.
-- As a user, I want to be able logout
+- As a user, I want to be able to logout
+- As a user, I want to be able to be able to save my account balances to a file.
+- As a user, I want to be able to optionally load my saved account from a file when the program starts.
