@@ -1,13 +1,18 @@
 package atm;
 
 
+import persistence.Reader;
+import persistence.Saveable;
+
+import java.io.PrintWriter;
 import java.util.ArrayList;
+
 // Account that can be accessed and modified by the account owner.
 // ideas on how to create a bank and account
 // Source - https://www.youtube.com/watch?v=mp1_F7lfmNE
 
 
-public class Account {
+public class Account implements Saveable {
 
     // What type of account is this, ie (Checking, Saving, Emergency...)
     private String type;
@@ -19,6 +24,16 @@ public class Account {
     private String uuid;
     // List that remembers the transactions made to and from this account
     private ArrayList<Transaction> transactions;
+    //=========================================================
+    // section dedicated to the construction of saveable accounts
+    // tracks Id of next account being created
+    private static int nextAccountId = 1;
+    // account id
+    private int id;
+    // the account owner name
+    private String name;
+    //=========================================================
+
 
     /*
     Creates new Account with Account type, balance, Bank the account is associated with
@@ -35,7 +50,7 @@ public class Account {
         this.uuid = bank.getNewAccountUUId();
 
         // initialize an empty list of transaction (Probably don't need)
-        // this.transactions = new ArrayList<>();
+        this.transactions = new ArrayList<>();
 
         /* adds the account to the owner and bank lists so account is added and UPDATED to
         UserInfo, Bank, and Account ArrayLists
@@ -52,6 +67,29 @@ public class Account {
                         + "with %s balance and a UUID of %s.\n\n",
                 type, bankName, balance, uuid);
 
+    }
+
+    // REQUIRES: name have a length greater than 0, balance > 0
+    // EFFECTS: constructs account with id, name and balance;
+    // nextAccountId is the id of the next account to be constructed
+    // NOTE: this constructor is only used to make an account from data stored in file
+    public Account(int nextId, int id, String name, double balance) {
+        nextAccountId = nextId;
+        this.id = id;
+        this.name = name;
+        this.balance = balance;
+    }
+
+
+    @Override
+    public void save(PrintWriter printWriter) {
+        printWriter.print(nextAccountId);
+        printWriter.print(Reader.DELIMITER);
+        printWriter.print(id);
+        printWriter.print(Reader.DELIMITER);
+        printWriter.print(name);
+        printWriter.print(Reader.DELIMITER);
+        printWriter.println(balance);
     }
 
     public String getAccountType() {
@@ -100,6 +138,5 @@ public class Account {
         Transaction newTransaction = new Transaction(amount, this);
         this.transactions.add(newTransaction);
     }
-
 
 }

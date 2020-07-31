@@ -1,7 +1,16 @@
 package ui;
 
+import atm.Account;
 import atm.Bank;
 import atm.UserInfo;
+import persistence.Writer;
+import persistence.Reader;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 import java.util.Scanner;
 // ATM that creates an instance with a given account and scans for user inputs
@@ -17,6 +26,7 @@ import java.util.Scanner;
 
 
 public class ATM {
+
     // MODIFIES: this
     // EFFECTS: creates an instance of an ATM that starts at the login screen and scans for
     // correct username/password combo
@@ -46,6 +56,10 @@ public class ATM {
         }
     }
 
+
+
+
+
     /* Login Ideas Source - https://www.tutorialspoint.com/how-can-we-create-a-login-form-in-java#
      :~:text=We%20can%20develop%20a%20login,and%20finally%20one%20submit%20button.
      */
@@ -57,6 +71,7 @@ public class ATM {
         String username;
         int password;
         UserInfo acceptedUser;
+        scanner = new Scanner(System.in);
 
         // ask for username and password
         do {
