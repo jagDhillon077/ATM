@@ -80,7 +80,6 @@ public class Account implements Saveable {
         this.balance = balance;
     }
 
-
     @Override
     public void save(PrintWriter printWriter) {
         printWriter.print(nextAccountId);
@@ -91,6 +90,9 @@ public class Account implements Saveable {
         printWriter.print(Reader.DELIMITER);
         printWriter.println(balance);
     }
+
+
+
 
     public String getAccountType() {
         return type;

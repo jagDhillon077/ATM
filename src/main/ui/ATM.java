@@ -52,7 +52,7 @@ public class ATM {
         // creates user with savings accounts
         UserInfo user =
                 bankName.newUser("Jagmeet",
-                        "Dhillon", "12345", 111111);
+                        "Dhillon", "1", 1);
 
 
         UserInfo tryUser;
@@ -105,8 +105,8 @@ public class ATM {
         UserInfo user1 =
                 bankName.newUser("Jagmeet",
                         "Dhillon", "12345", 111111);
-        checking = new Account("Checking", 0, bankName, user1, theBanksName);
-        saving = new Account("Saving", 0, bankName, user1, theBanksName);
+        checking = new Account(1, 0, "Jagmeet", 150);
+        saving = new Account(2, 1, "Jagmeet", 500);
         input = new Scanner(System.in);
     }
 
