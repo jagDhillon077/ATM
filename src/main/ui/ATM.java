@@ -26,6 +26,13 @@ import java.util.Scanner;
 
 
 public class ATM {
+    private static final String ACCOUNTS_FILE = "./data/accounts.txt";
+    private static Account checking;
+    private static Account saving;
+    private static Scanner input;
+    private static Bank bankName;
+    private static UserInfo user1;
+    private static String theBanksName;
 
     // MODIFIES: this
     // EFFECTS: creates an instance of an ATM that starts at the login screen and scans for
@@ -47,7 +54,8 @@ public class ATM {
         while (true) {
             // does not leave login prompt until successful login
             tryUser = ATM.loginScreenPrompt(bankName, scanner);
-
+            scanner = new Scanner(System.in);
+            loadAccounts();
             // persistently stays in the ATM menu until successful login or quit
             // Scanner Source = https://www.w3schools.com/java/java_user_input.asp
             // Source # 2 - https://docs.oracle.com/javase/7/docs/api/java/util/Scanner.html
@@ -56,8 +64,46 @@ public class ATM {
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: loads accounts from ACCOUNTS_FILE, if that file exists;
+    // otherwise initializes accounts with default values
+    private static void loadAccounts() {
+        try {
+            List<Account> accounts = Reader.readAccounts(new File(ACCOUNTS_FILE));
+            checking = accounts.get(0);
+            saving = accounts.get(1);
+        } catch (IOException e) {
+            init();
+        }
+    }
 
+    // EFFECTS: saves state of chequing and savings accounts to ACCOUNTS_FILE
+    private static void saveAccounts() {
+        try {
+            Writer writer = new Writer(new File(ACCOUNTS_FILE));
+            writer.write(checking);
+            writer.write(saving);
+            writer.close();
+            System.out.println("Accounts saved to file " + ACCOUNTS_FILE);
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to save accounts to " + ACCOUNTS_FILE);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            // this is due to a programming error
+        }
+    }
 
+    private static void init() {
+        // creates a bank the ATM is associated with
+        Bank bankName = new Bank("TD");
+        // creates user with savings accounts
+        UserInfo user1 =
+                bankName.newUser("Jagmeet",
+                        "Dhillon", "12345", 111111);
+        checking = new Account("Checking", 0, bankName, user1, theBanksName);
+        saving = new Account("Saving", 0, bankName, user1, theBanksName);
+        input = new Scanner(System.in);
+    }
 
 
     /* Login Ideas Source - https://www.tutorialspoint.com/how-can-we-create-a-login-form-in-java#
@@ -71,7 +117,6 @@ public class ATM {
         String username;
         int password;
         UserInfo acceptedUser;
-        scanner = new Scanner(System.in);
 
         // ask for username and password
         do {
@@ -111,16 +156,17 @@ public class ATM {
             System.out.println("2) Deposit");
             System.out.println("3) Transfer between accounts");
             System.out.println("4) Exit");
+            System.out.println("5) Save accounts to file");
             System.out.println();
             System.out.print("Enter Here: ");
             System.out.println("\n********************************************************"
                     + "******************************************************************");
             choice = scanner.nextInt();
             // prevents any mistyped numbers from being inputted
-            if (1 > choice || choice > 4) {
+            if (1 > choice || choice > 5) {
                 System.out.println("Please choose a choice between the numbers 1-4");
             }
-        } while (choice < 1 || choice > 4);
+        } while (choice < 1 || choice > 5);
         showUserMenu(userInfo, scanner, choice);
 
     }
@@ -138,6 +184,8 @@ public class ATM {
             ATM.depositMoney(userInfo, scanner);
         } else if (choice == 3) {
             ATM.transferMoney(userInfo, scanner);
+        } else if (choice == 5) {
+            ATM.saveAccounts();
         }
         if (choice != 4) {
             // keeps the user display
