@@ -34,6 +34,11 @@ public class ATM {
     private static UserInfo user1;
     private static String theBanksName;
 
+    // runs ATM application
+    public ATM() {
+        ATM.run();
+    }
+
     // MODIFIES: this
     // EFFECTS: creates an instance of an ATM that starts at the login screen and scans for
     // correct username/password combo
