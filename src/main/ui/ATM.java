@@ -156,17 +156,16 @@ public class ATM {
         do {
             System.out.println("********************************************************"
                     + "******************************************************************");
-            System.out.printf("Welcome %s, please choose from the set of options\n",
-                    userInfo.getFirstName());
-            System.out.println("1) Withdraw");
+            System.out.println("Welcome, please choose from the set of options\n");
+            System.out.printf("Balance of %s's CHECKING Account: %s", userInfo.getFirstName(), checking.getBalancee());
+            System.out.printf("\nBalance of %s's SAVINGS Account: %s\n", userInfo.getFirstName(), saving.getBalancee());
+            System.out.println("\n1) Withdraw");
             System.out.println("2) Deposit");
             System.out.println("3) Transfer between accounts");
             System.out.println("4) Exit");
             System.out.println("5) Save accounts to file");
             System.out.println();
             System.out.print("Enter Here: ");
-            System.out.println("\n********************************************************"
-                    + "******************************************************************");
             choice = scanner.nextInt();
             // prevents any mistyped numbers from being inputted
             if (1 > choice || choice > 5) {
@@ -178,11 +177,11 @@ public class ATM {
     }
 
     // after the creation of the accounts, accounts usernames set
-   // public static void setAccountNames(String setUsername) {
+    // public static void setAccountNames(String setUsername) {
     //    init();
     //    checking.setName(setUsername);
-   //     saving.setName(setUsername);
-   // }
+    //     saving.setName(setUsername);
+    // }
 
 
     // REQUIRES: choice to be between 1-4 Inclusive
@@ -306,21 +305,15 @@ public class ATM {
         Account selected = selectAccount(scanner);
 
         // transfer amount
-        do {
-            System.out.println("Enter the amount to withdraw: ");
-            amount = scanner.nextDouble();
-            if (amount > acctBal) {
-                System.out.println("Amount must not be greater than Account Balance");
-            }
-        } while (amount > acctBal);
+        System.out.println("Enter the amount to withdraw: ");
+        amount = scanner.nextDouble();
 
 
         // make withdrawal
         userInfo.addAcctTransaction(fromAcct, -1 * amount);  // withdraw that occurs in the console
-        selected.withdraw(amount); // withdraw that occurs behind the scenes
+        selected.withdraw(amount, selected, scanner); // withdraw that occurs behind the scenes
 
     }
-
 
 
     // REQUIRES: amount > 0
@@ -341,7 +334,7 @@ public class ATM {
         } while (toAcct < 0 || toAcct >= 2);
         acctBal = userInfo.getAcctBalance(toAcct);
 
-        depositToSelectedAccount(toAcct,acctBal,userInfo,scanner);
+        depositToSelectedAccount(toAcct, acctBal, userInfo, scanner);
     }
 
     public static void depositToSelectedAccount(int toAcct, double amount, UserInfo userInfo, Scanner scanner) {
@@ -385,6 +378,11 @@ public class ATM {
         } else {
             return saving;
         }
+    }
+
+    // EFFECTS: prints balance of account to the screen
+    private static void printBalance(Account selected) {
+        System.out.printf("Balance on File: $%.2f\n", selected.getBalancee());
     }
 
 }

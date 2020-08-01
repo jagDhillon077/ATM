@@ -98,7 +98,7 @@ public class UserInfo {
     // REQUIRES: Account
     // EFFECTS: prints a summary of all the accounts associated with the user
     public void accountSummary() {
-        System.out.printf("\n\n%s's account summary\n", this.firstName);
+        System.out.println("\n\n                                    Today's account summary\n");
         for (int i = 0; i < this.accounts.size(); i++) {
             System.out.printf("%d) %s\n", i + 1,
                     this.accounts.get(i).getSummaryLine());

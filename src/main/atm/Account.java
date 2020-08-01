@@ -6,6 +6,7 @@ import persistence.Saveable;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 // Account that can be accessed and modified by the account owner.
 // ideas on how to create a bank and account
@@ -105,7 +106,13 @@ public class Account implements Saveable {
      * EFFECTS: amount is withdrawn from account and updated
      * 		    balance is returned
      */
-    public double withdraw(double amount) {
+    public double withdraw(double amount, Account account, Scanner scanner) {
+        do {
+            if (amount > account.getBalancee()) {
+                System.out.println("Insufficient Funds to withdraw, please try again");
+                amount = scanner.nextDouble();
+            }
+        } while (amount > account.getBalancee());
         balance = balance - amount;
         return balance;
     }
@@ -161,6 +168,10 @@ public class Account implements Saveable {
     public void addTransaction(double amount) {
         Transaction newTransaction = new Transaction(amount, this);
         this.transactions.add(newTransaction);
+    }
+
+    public double getBalancee() {
+        return balance;
     }
 
 }
