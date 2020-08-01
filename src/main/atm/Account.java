@@ -25,13 +25,9 @@ public class Account implements Saveable {
     // List that remembers the transactions made to and from this account
     private ArrayList<Transaction> transactions;
     //=========================================================
-    // section dedicated to the construction of saveable accounts
-    // tracks Id of next account being created
-    private static int nextAccountId = 1;
-    // account id
-    private int id;
+    // section dedicated to the construction of saveable accounts;
     // the account owner name
-    private String name;
+    private String name = "";
     // the balance of the account
     private int initialBalance;
     //=========================================================
@@ -45,8 +41,6 @@ public class Account implements Saveable {
     // EFFECTS: creates an Account (Checking or Saving), with balance, owner of account, UUID, and list of Transactions
     public Account(String type, int balance, Bank bank, UserInfo owner, String bankName) {
 
-        id = nextAccountId++;
-        name = type;
         if (balance >= 0) {
             balance = initialBalance;
         } else {
@@ -84,16 +78,16 @@ public class Account implements Saveable {
     // EFFECTS: constructs account with id, name and balance;
     // nextAccountId is the id of the next account to be constructed
     // NOTE: this constructor is only used to make an account from data stored in file
-    public Account(int nextId, int id, String name, double balance) {
-        nextAccountId = nextId;
-        this.id = id;
-        setName(name);
+    public Account(String name, double balance) {
+        this.name = name;
         this.balance = balance;
     }
 
-    public void setName(String newName) {
+    public String setName(String newName) {
         this.name = newName;
+        return name;
     }
+
     /*
      * REQUIRES: amount >= 0
      * MODIFIES: this
@@ -118,10 +112,6 @@ public class Account implements Saveable {
 
     @Override
     public void save(PrintWriter printWriter) {
-        printWriter.print(nextAccountId);
-        printWriter.print(Reader.DELIMITER);
-        printWriter.print(id);
-        printWriter.print(Reader.DELIMITER);
         printWriter.print(name);
         printWriter.print(Reader.DELIMITER);
         printWriter.println(balance);

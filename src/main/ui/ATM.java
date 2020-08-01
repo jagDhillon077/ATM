@@ -32,6 +32,10 @@ public class ATM {
     private static Scanner input;
     private static Bank bankName;
     private static UserInfo user1;
+    // creates user with savings accounts
+    //UserInfo user =
+    // bankName.newUser("Jagmeet",
+    //   "Dhillon", "12", 1);
     private static String theBanksName;
 
     // runs ATM application
@@ -49,21 +53,18 @@ public class ATM {
         // creates a bank the ATM is associated with
         Bank bankName = new Bank("TD");
 
-        // creates user with savings accounts
-        UserInfo user =
-                bankName.newUser("Jagmeet",
-                        "Dhillon", "1", 1);
 
-
-        UserInfo tryUser;
+        UserInfo tryUser = bankName.newUser("Jagmeet", "Dhillon", "1", 1);
         while (true) {
             // does not leave login prompt until successful login
             tryUser = ATM.loginScreenPrompt(bankName, scanner);
+            //setAccountNames(tryUser.getUsername());
             scanner = new Scanner(System.in);
             loadAccounts();
             // persistently stays in the ATM menu until successful login or quit
             // Scanner Source = https://www.w3schools.com/java/java_user_input.asp
             // Source # 2 - https://docs.oracle.com/javase/7/docs/api/java/util/Scanner.html
+
             ATM.userMenu(tryUser, scanner);
 
         }
@@ -105,8 +106,8 @@ public class ATM {
         UserInfo user1 =
                 bankName.newUser("Jagmeet",
                         "Dhillon", "12345", 111111);
-        checking = new Account("Checking",250, bankName, user1, "TD");
-        saving = new Account("Savings",500, bankName, user1, "TD");
+        checking = new Account("Checking", 250, bankName, user1, "TD");
+        saving = new Account("Savings", 500, bankName, user1, "TD");
         input = new Scanner(System.in);
     }
 
@@ -138,9 +139,6 @@ public class ATM {
             }
 
         } while (acceptedUser == null); //screen does not change until correct login attempt
-        init();
-        checking.setName(username);
-        saving.setName(username);
         return acceptedUser;
     }
 
@@ -152,6 +150,7 @@ public class ATM {
 
         //initializing choice
         int choice;
+
 
         // initialize user menu
         do {
@@ -177,6 +176,13 @@ public class ATM {
         showUserMenu(userInfo, scanner, choice);
 
     }
+
+    // after the creation of the accounts, accounts usernames set
+   // public static void setAccountNames(String setUsername) {
+    //    init();
+    //    checking.setName(setUsername);
+   //     saving.setName(setUsername);
+   // }
 
 
     // REQUIRES: choice to be between 1-4 Inclusive
@@ -311,6 +317,7 @@ public class ATM {
         // make withdrawal
         userInfo.addAcctTransaction(fromAcct, -1 * amount);  // withdraw that occurs in the console
         selected.withdraw(amount); // withdraw that occurs behind the scenes
+
     }
 
     // REQUIRES: amount > 0
@@ -334,6 +341,12 @@ public class ATM {
         } while (toAcct < 0 || toAcct >= 2);
         acctBal = userInfo.getAcctBalance(toAcct);
 
+        if (toAcct == 1) {
+            selected.setName("Savings");
+        } else {
+            selected.setName("Checking");
+        }
+
         // transfer amount
         do {
             System.out.println("Enter the amount to transfer: ");
@@ -349,7 +362,6 @@ public class ATM {
         userInfo.addAcctTransaction(toAcct, amount); // deposit that occurs in the console
         selected.deposit(amount); // deposit behind the scenes for the save file
     }
-
 
 
     //===========================================
