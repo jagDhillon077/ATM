@@ -204,7 +204,7 @@ public class ATM {
             // keeps the user display
             ATM.userMenu(userInfo, scanner);
         } else if (choice == 4) {
-            run();
+            System.exit(0);
         }
     }
 
@@ -285,7 +285,7 @@ public class ATM {
     // MODIFIES: selected user account
     // EFFECTS: withdraws money from selected user account
     public static void withdrawMoney(UserInfo userInfo, Scanner scanner) {
-        Account selected = selectAccount(scanner);
+
         int fromAcct;
         int toAcct;
         double acctBal;
@@ -303,6 +303,8 @@ public class ATM {
         } while (fromAcct < 0 || fromAcct >= 2);
         acctBal = userInfo.getAcctBalance(fromAcct);
 
+        Account selected = selectAccount(scanner);
+
         // transfer amount
         do {
             System.out.println("Enter the amount to withdraw: ");
@@ -312,7 +314,6 @@ public class ATM {
             }
         } while (amount > acctBal);
 
-        scanner.nextLine();
 
         // make withdrawal
         userInfo.addAcctTransaction(fromAcct, -1 * amount);  // withdraw that occurs in the console
@@ -320,20 +321,19 @@ public class ATM {
 
     }
 
+
+
     // REQUIRES: amount > 0
     // MODIFIES: account being deposited into
     // EFFECTS: deposits amount into the bank account
     public static void depositMoney(UserInfo userInfo, Scanner scanner) {
-        Account selected = selectAccount(scanner);
         int toAcct;
         double acctBal;
         double amount;
-
-
         // get the account to deposit to
         do {
-            System.out.println("Enter the number from (1-2) of the account\n"
-                    + "to deposit to: ");
+            System.out.println("1 for checking");
+            System.out.println("2 for saving");
             toAcct = scanner.nextInt() - 1;
             if (toAcct < 0 || toAcct >= 2) {
                 System.out.println("Invalid Account entered. Please try again.");
@@ -341,6 +341,11 @@ public class ATM {
         } while (toAcct < 0 || toAcct >= 2);
         acctBal = userInfo.getAcctBalance(toAcct);
 
+        depositToSelectedAccount(toAcct,acctBal,userInfo,scanner);
+    }
+
+    public static void depositToSelectedAccount(int toAcct, double amount, UserInfo userInfo, Scanner scanner) {
+        Account selected = selectAccount(scanner);
         if (toAcct == 1) {
             selected.setName("Savings");
         } else {
@@ -370,8 +375,8 @@ public class ATM {
         int selection = 0;  // force entry into loop
 
         while (!(selection == 1 || selection == 2)) {
-            System.out.println("1 for checking");
-            System.out.println("2 for saving");
+            System.out.println("Confirm entry of the account [1-2]\n"
+                    + "to make action on: ");
             selection = scanner.nextInt();
         }
 
