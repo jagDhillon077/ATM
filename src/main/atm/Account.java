@@ -32,6 +32,8 @@ public class Account implements Saveable {
     private int id;
     // the account owner name
     private String name;
+    // the balance of the account
+    private int initialBalance;
     //=========================================================
 
 
@@ -42,6 +44,15 @@ public class Account implements Saveable {
     // MODIFIES: this
     // EFFECTS: creates an Account (Checking or Saving), with balance, owner of account, UUID, and list of Transactions
     public Account(String type, int balance, Bank bank, UserInfo owner, String bankName) {
+
+        id = nextAccountId++;
+        name = type;
+        if (balance >= 0) {
+            balance = initialBalance;
+        } else {
+            balance = 0;
+        }
+
         // sets account type and the owner
         this.type = type;
         this.owner = owner;
@@ -76,8 +87,33 @@ public class Account implements Saveable {
     public Account(int nextId, int id, String name, double balance) {
         nextAccountId = nextId;
         this.id = id;
-        this.name = name;
+        setName(name);
         this.balance = balance;
+    }
+
+    public void setName(String newName) {
+        this.name = newName;
+    }
+    /*
+     * REQUIRES: amount >= 0
+     * MODIFIES: this
+     * EFFECTS: amount is added to balance and updated
+     * 			balance is returned
+     */
+    public double deposit(double amount) {
+        balance = balance + amount;
+        return balance;
+    }
+
+    /*
+     * REQUIRES: amount >= 0 and amount <= getBalance()
+     * MODIFIES: this
+     * EFFECTS: amount is withdrawn from account and updated
+     * 		    balance is returned
+     */
+    public double withdraw(double amount) {
+        balance = balance - amount;
+        return balance;
     }
 
     @Override
@@ -90,8 +126,6 @@ public class Account implements Saveable {
         printWriter.print(Reader.DELIMITER);
         printWriter.println(balance);
     }
-
-
 
 
     public String getAccountType() {
@@ -109,8 +143,6 @@ public class Account implements Saveable {
     public UserInfo getUser() {
         return owner;
     }
-    
-
 
 
     // Source - https://matthew-brett.github.io/teaching/string_formatting.html

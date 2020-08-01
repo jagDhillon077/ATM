@@ -105,8 +105,8 @@ public class ATM {
         UserInfo user1 =
                 bankName.newUser("Jagmeet",
                         "Dhillon", "12345", 111111);
-        checking = new Account(1, 0, "Jagmeet", 150);
-        saving = new Account(2, 1, "Jagmeet", 500);
+        checking = new Account("Checking",250, bankName, user1, "TD");
+        saving = new Account("Savings",500, bankName, user1, "TD");
         input = new Scanner(System.in);
     }
 
@@ -138,7 +138,9 @@ public class ATM {
             }
 
         } while (acceptedUser == null); //screen does not change until correct login attempt
-
+        init();
+        checking.setName(username);
+        saving.setName(username);
         return acceptedUser;
     }
 
@@ -277,7 +279,7 @@ public class ATM {
     // MODIFIES: selected user account
     // EFFECTS: withdraws money from selected user account
     public static void withdrawMoney(UserInfo userInfo, Scanner scanner) {
-
+        Account selected = selectAccount(scanner);
         int fromAcct;
         int toAcct;
         double acctBal;
@@ -307,14 +309,15 @@ public class ATM {
         scanner.nextLine();
 
         // make withdrawal
-        userInfo.addAcctTransaction(fromAcct, -1 * amount);
+        userInfo.addAcctTransaction(fromAcct, -1 * amount);  // withdraw that occurs in the console
+        selected.withdraw(amount); // withdraw that occurs behind the scenes
     }
 
     // REQUIRES: amount > 0
     // MODIFIES: account being deposited into
     // EFFECTS: deposits amount into the bank account
     public static void depositMoney(UserInfo userInfo, Scanner scanner) {
-
+        Account selected = selectAccount(scanner);
         int toAcct;
         double acctBal;
         double amount;
@@ -343,8 +346,28 @@ public class ATM {
         scanner.nextLine();
 
         // make deposit
-        userInfo.addAcctTransaction(toAcct, amount);
+        userInfo.addAcctTransaction(toAcct, amount); // deposit that occurs in the console
+        selected.deposit(amount); // deposit behind the scenes for the save file
+    }
 
+
+
+    //===========================================
+    // EFFECTS: prompts user to select chequing or savings account and returns it
+    private static Account selectAccount(Scanner scanner) {
+        int selection = 0;  // force entry into loop
+
+        while (!(selection == 1 || selection == 2)) {
+            System.out.println("1 for checking");
+            System.out.println("2 for saving");
+            selection = scanner.nextInt();
+        }
+
+        if (selection == 1) {
+            return checking;
+        } else {
+            return saving;
+        }
     }
 
 }
