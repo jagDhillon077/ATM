@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.sql.SQLOutput;
 import java.util.List;
 
 import java.util.Scanner;
@@ -64,7 +65,9 @@ public class ATM {
             // persistently stays in the ATM menu until successful login or quit
             // Scanner Source = https://www.w3schools.com/java/java_user_input.asp
             // Source # 2 - https://docs.oracle.com/javase/7/docs/api/java/util/Scanner.html
-
+            System.out.println("What would you like to do?");
+            System.out.println("Load Saved Account?");
+            System.out.println();
             ATM.userMenu(tryUser, scanner);
 
         }
