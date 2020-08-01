@@ -231,52 +231,51 @@ public class ATM {
                 System.out.println("Invalid Account entered. Please try again.");
             }
 
+
         } while ((fromAcct < 0 || fromAcct >= 2));
         acctBal = userInfo.getAcctBalance(fromAcct);
+        Account source = selectAccount(scanner);
 
         //get account to transfer too
         do {
             System.out.println("Enter the number from (1-2) of the account\n"
                     + "to transfer to: ");
             toAcct = scanner.nextInt() - 1;
-            if (toAcct < 0 || toAcct >= 2) {
-                System.out.println("Invalid Account entered. Please try again.");
-            }
+
         } while (toAcct < 0 || toAcct >= 2);
+        Account destination = selectAccount(scanner);
         // Initialize amount
         System.out.println("Enter the amount to transfer: ");
         amount = scanner.nextDouble();
 
         // ready up the transfer for processing
-        readyTransfer(userInfo, scanner, fromAcct, toAcct, amount, acctBal);
+        readyTransfer(userInfo, scanner, fromAcct, toAcct, acctBal, source, destination);
     }
 
 
     // REQUIRES: transferMoney to call this helper
     // EFFECTS: makes sure the amount being transferred is less than or equal to the balance
     public static void readyTransfer(UserInfo userInfo, Scanner scanner, int fromAcct,
-                                     int toAcct, double amount, double acctBal) {
+                                     int toAcct, double acctBal, Account source, Account destination) {
+
         // transfer amount
-        do {
+        System.out.println("Retype amount to confirm,\n Ensure amount is not greater than account balance");
+        double amount = scanner.nextDouble();
 
-            System.out.println("Retype amount to confirm,\n Ensure amount is not greater than account balance");
-            amount = scanner.nextDouble();
-            if (amount > acctBal) {
-                System.out.println("Amount must not be greater than Account Balance");
-            }
-        } while (amount > acctBal);
 
-        makeTransfer(userInfo, scanner, fromAcct, toAcct, amount, acctBal);
+        makeTransfer(userInfo, scanner, fromAcct, toAcct, amount, acctBal, source, destination);
     }
 
     // REQUIRES: transferMoney to call this helper function
     // MODIFIES: this
     // EFFECTS: makes the transfer in between accounts
     public static void makeTransfer(UserInfo userInfo, Scanner scanner, int fromAcct,
-                                    int toAcct, double amount, double acctBal) {
+                                    int toAcct, double amount, double acctBal, Account source, Account destination) {
         //transfer
         userInfo.addAcctTransaction(fromAcct, -1 * amount);
         userInfo.addAcctTransaction(toAcct, amount);
+        source.withdraw(amount, source, scanner); // withdraw that occurs behind the scenes
+        destination.deposit(amount); // deposit behind the scenes for the save file
     }
 
 
