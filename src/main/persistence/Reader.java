@@ -10,6 +10,9 @@ import java.util.Arrays;
 import java.util.List;
 
 // A reader that can read account data from a file
+// Source - TellerApp code and logic is integrated to this
+// program as TellerApp perfectly fit the needs of this program
+
 public class Reader {
     public static final String DELIMITER = ",";
 

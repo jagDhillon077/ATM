@@ -6,6 +6,9 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 
 // A writer that can write account data to a file
+// Source - TellerApp code and logic is integrated to this
+// program as TellerApp perfectly fit the needs of this program
+
 public class Writer {
     private PrintWriter printWriter;
 

@@ -1,2 +1,2 @@
-Checking,41600.0
-Savings,10500.0
+Checking,11.0
+Savings,112.0
