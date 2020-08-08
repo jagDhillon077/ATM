@@ -92,7 +92,7 @@ public class ATM {
     // MODIFIES: this
     // EFFECTS: loads accounts from ACCOUNTS_FILE, if that file exists;
     // otherwise initializes accounts with default values
-    private static void loadAccounts() {
+    public static void loadAccounts() {
         try {
             List<Account> accounts = Reader.readAccounts(new File(ACCOUNTS_FILE));
             checking = accounts.get(0);
@@ -102,21 +102,7 @@ public class ATM {
         }
     }
 
-    // EFFECTS: saves state of chequing and savings accounts to ACCOUNTS_FILE
-    private static void saveAccounts() {
-        try {
-            Writer writer = new Writer(new File(ACCOUNTS_FILE));
-            writer.write(checking);
-            writer.write(saving);
-            writer.close();
-            System.out.println("Accounts saved to file " + ACCOUNTS_FILE);
-        } catch (FileNotFoundException e) {
-            System.out.println("Unable to save accounts to " + ACCOUNTS_FILE);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            // this is due to a programming error
-        }
-    }
+
 
     // Initializes the new accounts made
     private static void init() {
@@ -209,7 +195,7 @@ public class ATM {
         } else if (choice == 3) {
             ATM.transferMoney(userInfo, scanner);
         } else if (choice == 5) {
-            ATM.saveAccounts();
+            //ATM.saveAccounts();
         }
         if (choice != 4) {
             // keeps the user display
@@ -284,7 +270,8 @@ public class ATM {
         //transfer
         userInfo.addAcctTransaction(fromAcct, -1 * amount);
         userInfo.addAcctTransaction(toAcct, amount);
-        source.withdraw(amount, source, scanner); // withdraw that occurs behind the scenes
+        source.withdraw(amount); // withdraw that occurs behind the scenes
+        // CHANGED THIS...DELETED ACCOUNT AND SCANNER PARAMETER
         destination.deposit(amount); // deposit behind the scenes for the save file
     }
 
@@ -318,7 +305,8 @@ public class ATM {
 
         // make withdrawal
         userInfo.addAcctTransaction(fromAcct, -1 * amount);  // withdraw that occurs in the console
-        selected.withdraw(amount, selected, scanner); // withdraw that occurs behind the scenes
+        selected.withdraw(amount); // withdraw that occurs behind the scenes
+        // CHANGED THIS...DELETED ACCOUNT AND SCANNER PARAMETER
 
     }
 
@@ -479,7 +467,8 @@ public class ATM {
 
         // make withdrawal
         userInfo.addAcctTransaction(fromAcct, -1 * amount);  // withdraw that occurs in the console
-        selected.withdraw(amount, selected, scanner); // withdraw that occurs behind the scenes
+        selected.withdraw(amount); // withdraw that occurs behind the scenes
+        // CHANGED THIS...DELETED ACCOUNT AND SCANNER PARAMETER
 
     }
 

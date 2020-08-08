@@ -75,6 +75,16 @@ public class Account implements Saveable {
 
     }
 
+    public String getType() {
+        return type;
+    }
+
+
+    public String getUuid() {
+        return uuid;
+    }
+
+
     // REQUIRES: name have a length greater than 0, balance > 0
     // EFFECTS: constructs account with id, name and balance;
     // nextAccountId is the id of the next account to be constructed
@@ -106,13 +116,8 @@ public class Account implements Saveable {
      * EFFECTS: amount is withdrawn from account and updated
      * 		    balance is returned
      */
-    public double withdraw(double amount, Account account, Scanner scanner) {
-        do {
-            if (amount > account.getBalancee()) {
-                System.out.println("Insufficient Funds to withdraw, please try again");
-                amount = scanner.nextDouble();
-            }
-        } while (amount > account.getBalancee());
+    public double withdraw(double amount) {
+
         balance = balance - amount;
         return balance;
     }

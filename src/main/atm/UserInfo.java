@@ -51,9 +51,12 @@ public class UserInfo {
 
         // prints message describing all the user information.
         // Source - https://matthew-brett.github.io/teaching/string_formatting.html
+        /*
         System.out.printf("Welcome %s %s, your new user ID %s has been created with pin %s"
                         + "\n and username: %s \n\n",
                 firstName, lastName, uuid, password, username);
+
+         */
 
 
     }
