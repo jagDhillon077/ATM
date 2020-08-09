@@ -13,6 +13,11 @@ import java.util.List;
 import java.util.Scanner;
 import javax.swing.JPanel;
 
+import java.io.File;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+
 import atm.Account;
 import atm.Bank;
 import atm.UserInfo;
@@ -24,11 +29,30 @@ public class GUI extends JFrame implements ActionListener {
     //==========================================================================================
     //==================================GUI Fields==============================================
     //==========================================================================================
+    private static JPasswordField passwordInput;
+    private static ImageIcon bankSymbol;
+    private static final Color LIGHT_BLUE = new Color(51, 204, 255);
     private static JLabel usernameLabel;
     private static JLabel passwordLabel;
     private static JLabel welcomeLabel;
     private static JLabel selectOptionsLabel;
     private static JLabel enterAmountLabel;
+    private static JLabel loginPassOrFail;
+    private static JLabel checkingAccountExplanationLabel;
+    private static JLabel selectAccountLabelDeposit;
+    private static JLabel savingAccountExplanationLabel;
+    private static JLabel selectAccountLabelTransfer;
+    private static JLabel transferAccountExplanationLabel;
+    private static JTextField userInput;
+    private static JTextField amountEnteredDeposit;
+    private static JTextField amountEnteredWithdraw;
+    private static JTextField amountEnteredTransfer;
+    private static JTextArea textAreaTopHalf;
+    private static JTextArea textAreaBottomHalf;
+    private static JTextArea loginTextArea;
+    private static JLabel selectAccountLabelWithdraw;
+    private static JButton button;
+    private static JButton confirmDepositButtonSavings;
     private static JButton savingsAccountButtonDeposit;
     private static JButton checkingAccountButtonDeposit;
     private static JButton withdrawButton;
@@ -36,32 +60,13 @@ public class GUI extends JFrame implements ActionListener {
     private static JButton transferButton;
     private static JButton saveAccountsButton;
     private static JButton exitButton;
-    private static JTextField userInput;
-    private static JPasswordField passwordInput;
-    private static JButton button;
-    private static JLabel loginPassOrFail;
-    private static JLabel checkingAccountExplanationLabel;
     private static JButton confirmDepositButtonChecking;
-    private static ImageIcon bankSymbol;
-    private static JTextArea textAreaTopHalf;
-    private static JTextArea textAreaBottomHalf;
-    private static JTextArea loginTextArea;
-    private static JLabel selectAccountLabelDeposit;
-    private static final Color LIGHT_BLUE = new Color(51, 204, 255);
-    private static JTextField amountEnteredDeposit;
-    private static JLabel savingAccountExplanationLabel;
-    private static JButton confirmDepositButtonSavings;
-    private static JLabel selectAccountLabelWithdraw;
     private static JButton savingsAccountButtonWithdraw;
     private static JButton checkingAccountButtonWithdraw;
-    private static JTextField amountEnteredWithdraw;
     private static JButton confirmWithdrawButtonSavings;
     private static JButton confirmWithdrawButtonChecking;
-    private static JLabel selectAccountLabelTransfer;
     private static JButton savingsToCheckingAccountButtonTransfer;
     private static JButton checkingToSavingsAccountButtonTransfer;
-    private static JTextField amountEnteredTransfer;
-    private static JLabel transferAccountExplanationLabel;
     private static JButton confirmSavingsToCheckingAccountButtonTransfer;
     private static JButton confirmCheckingToSavingsAccountButtonTransfer;
     //==========================================================================================
@@ -77,156 +82,63 @@ public class GUI extends JFrame implements ActionListener {
     //private static Account
 
     public static void main(String[] args) {
-        // TODO and add instructions on what to do in login screen
-        // TODO Update names of the accounts when making deposits withdrawalas and whatnot
         // TODO Grader Instructions
-        // TODO handle the 0  dollar and nothing inputted exceptions (if int == 0 or is get text == "") throiw exception
-        // TODO organize fields to make it look nice
-        // TODO methods under 25 lines
-        // TODO Background and icon
-        // TODO take everything out of main
-        // TODO clean up method that are no longer required
-        // TODO delete the ATM main class (if its a good idea)
-        guiAtmModel();
-//        JPanel panel = new JPanel();
-//        JFrame frame = new JFrame();
-//        frame.setSize(new Dimension(415, 275));
-//        panel.setBackground(LIGHT_BLUE);
-//        frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
-//        panel.setLayout(null); // CHANGE THIS TO GRID???
-//        frame.setVisible(true);
-//        frame.setLocationRelativeTo(null);
-//        frame.add(panel);
-//        frame.setResizable(true);
-//        // unmodifiable "Welcome Label"
-//        welcomeLabel = new JLabel("Welcome to ATM #0627");
-//        welcomeLabel.setBounds(120, 10, 150, 25);
-//        panel.add(welcomeLabel);
-//        // unmodifiable "Username" text
-//        usernameLabel = new JLabel("Enter Username: ");
-//        usernameLabel.setBounds(10, 40, 100, 25);
-//        panel.add(usernameLabel);
-//        // unmodifiable "Password" text
-//        passwordLabel = new JLabel("Enter Password: ");
-//        passwordLabel.setBounds(10, 70, 100, 25);
-//        panel.add(passwordLabel);
-//        // username input field
-//        userInput = new JTextField(20);
-//        userInput.setBounds(115, 40, 165, 25);
-//        panel.add(userInput);
-//        // password input field
-//        passwordInput = new JPasswordField(20);
-//        passwordInput.setBounds(115, 70, 165, 25);
-//        panel.add(passwordInput);
-//        // SPECIFIC PASSWORD FIELD FOR HIDDEN PASSWORDS
-//        // guiLoginScreenHelper prevents method from being 25+ lines
-//        // login attempt button
-//        button = new JButton("Login");
-//        button.setBounds(10, 100, 80, 25);
-//        button.addActionListener(new GUI());
-//        panel.add(button);
-//        // login pass or fail notifier
-//        loginPassOrFail = new JLabel("");
-//        loginPassOrFail.setBounds(100, 100, 300, 25);
-//        panel.add(loginPassOrFail);
-//        loginTextArea = new JTextArea();
-//        loginTextArea.setBounds(10, 130, 375, 100);
-//        panel.add(loginTextArea);
-//        loginTextArea.append(String.format("Welcome %s %s, your account has been created with \nUsername: %s"
-//                        + " \nPin: %s \n\n",
-//                tryUser.getFirstName(), tryUser.getLastName(), tryUser.getPassword(), tryUser.getUsername()));
+        loginScreenGuiOnStart();
+    }
+
+    private static void loginScreenGuiOnStart() {
+        JPanel panel = new JPanel();
+        JFrame frame = new JFrame();
+        frame.setSize(new Dimension(415, 275));
+        panel.setBackground(LIGHT_BLUE);
+        frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        panel.setLayout(null); // CHANGE THIS TO GRID???
+        frame.setVisible(true);
+        frame.setLocationRelativeTo(null);
+        frame.add(panel);
+        frame.setResizable(true);
+        welcome(panel);
+        loginTextArea = new JTextArea();
+        loginTextArea.setBounds(10, 130, 375, 100);
+        panel.add(loginTextArea);
+        loginTextArea.append(String.format("Welcome %s %s, your account has been created with \nUsername: %s"
+                        + " \nPin: %s \n\n",
+                tryUser.getFirstName(), tryUser.getLastName(), tryUser.getPassword(), tryUser.getUsername()));
         enterAmountLabel = new JLabel("Please Enter Amount");
-
-
     }
 
-
-    // MODIFIES: this
-    // EFFECTS: creates an instance of an ATM that starts at the login screen and scans for
-    // correct username/password combo
-    public static void runGui() {
-
-    }
-
-    /* Login Ideas Source - https://www.tutorialspoint.com/how-can-we-create-a-login-form-in-java#
-     :~:text=We%20can%20develop%20a%20login,and%20finally%20one%20submit%20button.
-     */
-    // EFFECTS: Shows the Login screen of ATM
-    public static UserInfo loginScreenPrompt(Bank bank, Scanner scanner) {
-        tryUser.accountSummary();
-        //initializes the login variables
-        // local variables Source -
-        // https://intellij-support.jetbrains.com/hc/en-us/community/posts/360000395439-Underlined-variables-
-        String username;
-        int password;
-        UserInfo acceptedUser;
-
-        // ask for username and password
-        do {
-            System.out.println("Welcome to TD Bank");
-            System.out.println("Enter Username: ");
-            username = scanner.nextLine();
-            System.out.println("Enter Password: ");
-            password = scanner.nextInt();
-            // checks if userInfo in Data is similar to the returned login service details
-            acceptedUser = bank.loginService(username, password);
-            if (acceptedUser == null) {
-                System.out.println("Please try again, your username and/or password is incorrect");
-                run();
-            }
-
-        } while (acceptedUser == null); //screen does not change until correct login attempt
-        return acceptedUser;
-    }
-
-
-    // MODIFIES: this
-    // EFFECTS: creates an instance of an ATM that starts at the login screen and scans for
-    // correct username/password combo
-    public static void run() {
-        // creates a scanner to scan the inputs
-        Scanner scanner = new Scanner(System.in);
-
-        // creates a bank the ATM is associated with
-        Bank bankName = new Bank("TD");
-
-
-        UserInfo tryUser = bankName.newUser("Jagmeet", "Dhillon", "1", 1);
-        while (true) {
-            int command;
-            // does not leave login prompt until successful login
-            tryUser = ATM.loginScreenPrompt(bankName, scanner);
-            //setAccountNames(tryUser.getUsername());
-            scanner = new Scanner(System.in);
-            do {
-                System.out.println("What would you like to do?\n");
-                System.out.println("Press 1 to Load Saved Accounts?");
-                System.out.println("Press 2 to Start with New Accounts\n"
-                        + "WARNING: Option 2 Overwrites previously saved accounts");
-                command = scanner.nextInt();
-                if (command < 1 || command > 2) {
-                    System.out.println("Please enter a Valid Command [1-2]");
-                }
-
-            } while (command < 1 || command > 2);
-            runAccountCommand(command, tryUser, scanner);
-        }
-
-    }
-
-    // EFFECTS: If 1 is selected, loads the accounts saved into file,
-    // Selection 2 initializes new accounts to the user
-    public static void runAccountCommand(int command, UserInfo tryUser, Scanner scanner) {
-        if (command == 1) {
-            loadAccounts();
-            // persistently stays in the ATM menu until successful login or quit
-            // Scanner Source = https://www.w3schools.com/java/java_user_input.asp
-            // Source # 2 - https://docs.oracle.com/javase/7/docs/api/java/util/Scanner.html
-
-            ATM.loadedUserMenu(tryUser, scanner);
-        } else if (command == 2) {
-            ATM.newUserMenu(tryUser, scanner);
-        }
+    private static void welcome(JPanel panel) {
+        // unmodifiable "Welcome Label"
+        welcomeLabel = new JLabel("Welcome to ATM #0627");
+        welcomeLabel.setBounds(120, 10, 150, 25);
+        panel.add(welcomeLabel);
+        // unmodifiable "Username" text
+        usernameLabel = new JLabel("Enter Username: ");
+        usernameLabel.setBounds(10, 40, 100, 25);
+        panel.add(usernameLabel);
+        // unmodifiable "Password" text
+        passwordLabel = new JLabel("Enter Password: ");
+        passwordLabel.setBounds(10, 70, 100, 25);
+        panel.add(passwordLabel);
+        // username input field
+        userInput = new JTextField(20);
+        userInput.setBounds(115, 40, 165, 25);
+        panel.add(userInput);
+        // password input field
+        passwordInput = new JPasswordField(20);
+        passwordInput.setBounds(115, 70, 165, 25);
+        panel.add(passwordInput);
+        // SPECIFIC PASSWORD FIELD FOR HIDDEN PASSWORDS
+        // guiLoginScreenHelper prevents method from being 25+ lines
+        // login attempt button
+        button = new JButton("Login");
+        button.setBounds(10, 100, 80, 25);
+        button.addActionListener(new GUI());
+        panel.add(button);
+        // login pass or fail notifier
+        loginPassOrFail = new JLabel("");
+        loginPassOrFail.setBounds(100, 100, 300, 25);
+        panel.add(loginPassOrFail);
     }
 
     // MODIFIES: this
@@ -255,21 +167,9 @@ public class GUI extends JFrame implements ActionListener {
         Scanner input = new Scanner(System.in);
     }
 
-
-    // Centres frame on desktop
-    // modifies: this
-    // effects:  location of frame is set so frame is centred on desktop
-    private void centreOnScreen() {
-        Dimension scrn = Toolkit.getDefaultToolkit().getScreenSize();
-        setLocation((scrn.width - getWidth()) / 2, (scrn.height - getHeight()) / 2);
-    }
-
-
-    public void actionPerformed(ActionEvent e) {
-        // creates a bank the ATM is associated with
-
+    public void actionPerformedHelper(ActionEvent e) {
         if (e.getSource() == button) {
-            loginServiceGuiButtonAction();
+            loginButtonAction();
         } else if (e.getSource() == withdrawButton) {
             withdrawButtonAction();
         } else if (e.getSource() == depositButton) {
@@ -289,27 +189,37 @@ public class GUI extends JFrame implements ActionListener {
         } else if (e.getSource() == checkingAccountButtonWithdraw) {
             checkingAccountButtonWithdrawAction();
         } else if (e.getSource() == confirmDepositButtonSavings) {
-            confirmDepositButtonOnAccountAction(saving, "\nDeposited %s into Savings Account");
-        } else if (e.getSource() == confirmDepositButtonChecking) {
-            confirmDepositButtonOnAccountAction(checking, "\nDeposited %s into Checking Account");
+            confirmDepositButtonSavingsAction();
+        }
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        // creates a bank the ATM is associated with
+
+        if ((e.getSource() == button) || (e.getSource() == withdrawButton) || (e.getSource() == depositButton)
+                || (e.getSource() == transferButton) || (e.getSource() == saveAccountsButton)
+                || (e.getSource() == exitButton) || (e.getSource() == savingsAccountButtonDeposit)
+                || (e.getSource() == checkingAccountButtonDeposit) || (e.getSource() == savingsAccountButtonWithdraw)
+                || (e.getSource() == checkingAccountButtonWithdraw) || (e.getSource() == confirmDepositButtonSavings)) {
+            actionPerformedHelper(e);
+        }  else if (e.getSource() == confirmDepositButtonChecking) {
+            confirmDepositButtonCheckingAction();
         } else if (e.getSource() == confirmWithdrawButtonSavings) {
-            confirmWithdrawButtonOnAccount(saving);
+            confirmWithdrawButtonSavingsAction();
         } else if (e.getSource() == confirmWithdrawButtonChecking) {
-            confirmWithdrawButtonOnAccount(checking);
+            confirmWithdrawButtonCheckingAction();
         } else if (e.getSource() == savingsToCheckingAccountButtonTransfer) {
             savingsToCheckingAccountButtonTransferAction();
         } else if (e.getSource() == checkingToSavingsAccountButtonTransfer) {
             checkingToSavingsAccountButtonTransferAction();
         } else if (e.getSource() == confirmSavingsToCheckingAccountButtonTransfer) {
-            confirmAccountsButtonTransferAction(saving, checking,
-                    "Savings to Checking Account", "%s is greater than Saving account balance");
+            confirmSavingsToCheckingAccountButtonTransferAction();
         } else if (e.getSource() == confirmCheckingToSavingsAccountButtonTransfer) {
-            confirmAccountsButtonTransferAction(checking, saving, "Checking to Savings Account",
-                    "%s is greater than Checking account balance");
+            confirmCheckingToSavingsAccountButtonTransferAction();
         }
     }
 
-    private void loginServiceGuiButtonAction() {
+    private void loginButtonAction() {
         String userInputText = userInput.getText();
         String passwordInputText = passwordInput.getText();
         System.out.println(userInputText + ", " + passwordInputText);
@@ -324,17 +234,17 @@ public class GUI extends JFrame implements ActionListener {
         }
     }
 
-    private void confirmAccountsButtonTransferAction(Account saving, Account checking, String s, String s2) {
-        if (Double.parseDouble(amountEnteredTransfer.getText()) <= saving.getBalancee()) {
-            saving.withdraw(Double.parseDouble(amountEnteredTransfer.getText()));
-            checking.deposit(Double.parseDouble(amountEnteredTransfer.getText()));
+    private void confirmCheckingToSavingsAccountButtonTransferAction() {
+        if (Double.parseDouble(amountEnteredTransfer.getText()) <= checking.getBalancee()) {
+            checking.withdraw(Double.parseDouble(amountEnteredTransfer.getText()));
+            saving.deposit(Double.parseDouble(amountEnteredTransfer.getText()));
             textAreaBottomHalf.setText("");
             textAreaBottomHalf.append(String.format("Balance on %s's CHECKING Account: %s\n",
                     tryUser.getFirstName(), checking.getBalancee()));
             textAreaBottomHalf.append(String.format("Balance on %s's SAVING Account: %s",
                     tryUser.getFirstName(), saving.getBalancee()));
             textAreaBottomHalf.append(String.format("\nTransferred %s from "
-                            + s,
+                            + "Checking to Savings Account",
                     amountEnteredTransfer.getText()));
             Sound.playSound("Music/transferSound.wav");
         } else {
@@ -344,7 +254,32 @@ public class GUI extends JFrame implements ActionListener {
             textAreaBottomHalf.append(String.format("Balance on %s's SAVING Account: %s",
                     tryUser.getFirstName(), saving.getBalancee()));
             textAreaBottomHalf.append(String.format("\n Unable to Transfer, "
-                            + s2,
+                            + "%s is greater than Checking account balance",
+                    amountEnteredTransfer.getText()));
+        }
+    }
+
+    private void confirmSavingsToCheckingAccountButtonTransferAction() {
+        if (Double.parseDouble(amountEnteredTransfer.getText()) <= saving.getBalancee()) {
+            saving.withdraw(Double.parseDouble(amountEnteredTransfer.getText()));
+            checking.deposit(Double.parseDouble(amountEnteredTransfer.getText()));
+            textAreaBottomHalf.setText("");
+            textAreaBottomHalf.append(String.format("Balance on %s's CHECKING Account: %s\n",
+                    tryUser.getFirstName(), checking.getBalancee()));
+            textAreaBottomHalf.append(String.format("Balance on %s's SAVING Account: %s",
+                    tryUser.getFirstName(), saving.getBalancee()));
+            textAreaBottomHalf.append(String.format("\nTransferred %s from "
+                            + "Savings to Checking Account",
+                    amountEnteredTransfer.getText()));
+            Sound.playSound("Music/transferSound.wav");
+        } else {
+            textAreaBottomHalf.setText("");
+            textAreaBottomHalf.append(String.format("Balance on %s's CHECKING Account: %s\n",
+                    tryUser.getFirstName(), checking.getBalancee()));
+            textAreaBottomHalf.append(String.format("Balance on %s's SAVING Account: %s",
+                    tryUser.getFirstName(), saving.getBalancee()));
+            textAreaBottomHalf.append(String.format("\n Unable to Transfer, "
+                            + "%s is greater than Saving account balance",
                     amountEnteredTransfer.getText()));
         }
     }
@@ -359,7 +294,29 @@ public class GUI extends JFrame implements ActionListener {
         savingsToCheckingAccountTransfer();
     }
 
-    private void confirmWithdrawButtonOnAccount(Account saving) {
+    private void confirmWithdrawButtonCheckingAction() {
+        if (Double.parseDouble(amountEnteredWithdraw.getText()) <= checking.getBalancee()) {
+            checking.withdraw(Double.parseDouble(amountEnteredWithdraw.getText()));
+            textAreaBottomHalf.setText("");
+            textAreaBottomHalf.append(String.format("Balance on %s's CHECKING Account: %s\n",
+                    tryUser.getFirstName(), checking.getBalancee()));
+            textAreaBottomHalf.append(String.format("Balance on %s's SAVING Account: %s",
+                    tryUser.getFirstName(), saving.getBalancee()));
+            textAreaBottomHalf.append(String.format("\nWithdrew %s from Checking Account",
+                    amountEnteredWithdraw.getText()));
+            Sound.playSound("Music/trimmedWithdrawSound.wav");
+        } else {
+            textAreaBottomHalf.setText("");
+            textAreaBottomHalf.append(String.format("Balance on %s's CHECKING Account: %s\n",
+                    tryUser.getFirstName(), checking.getBalancee()));
+            textAreaBottomHalf.append(String.format("Balance on %s's SAVING Account: %s",
+                    tryUser.getFirstName(), saving.getBalancee()));
+            textAreaBottomHalf.append("\n Unable to Withdraw, "
+                            + "amount is greater than account balance");
+        }
+    }
+
+    private void confirmWithdrawButtonSavingsAction() {
         if (Double.parseDouble(amountEnteredWithdraw.getText()) <= saving.getBalancee()) {
             saving.withdraw(Double.parseDouble(amountEnteredWithdraw.getText()));
             textAreaBottomHalf.setText("");
@@ -376,13 +333,33 @@ public class GUI extends JFrame implements ActionListener {
                     tryUser.getFirstName(), checking.getBalancee()));
             textAreaBottomHalf.append(String.format("Balance on %s's SAVING Account: %s",
                     tryUser.getFirstName(), saving.getBalancee()));
-            textAreaBottomHalf.append(String.format("\n Unable to Withdraw, "
-                            + "amount is greater than account balance",
-                    amountEnteredWithdraw.getText()));
+            textAreaBottomHalf.append("\n Unable to Withdraw, "
+                            + "amount is greater than account balance");
         }
     }
 
-    private void confirmDepositButtonOnAccountAction(Account saving, String s) {
+    private void confirmDepositButtonCheckingAction() {
+        try {
+            checking.deposit(Double.parseDouble(amountEnteredDeposit.getText()));
+            textAreaBottomHalf.setText("");
+            textAreaBottomHalf.append(String.format("Balance on %s's CHECKING Account: %s\n",
+                    tryUser.getFirstName(), checking.getBalancee()));
+            textAreaBottomHalf.append(String.format("Balance on %s's SAVING Account: %s",
+                    tryUser.getFirstName(), saving.getBalancee()));
+            textAreaBottomHalf.append(String.format("\nDeposited %s into Checking Account",
+                    amountEnteredDeposit.getText()));
+            Sound.playSound("Music/chaChing.wav");
+        } catch (NumberFormatException z) {
+            textAreaBottomHalf.setText("");
+            textAreaBottomHalf.append(String.format("Balance on %s's CHECKING Account: %s\n",
+                    tryUser.getFirstName(), checking.getBalancee()));
+            textAreaBottomHalf.append(String.format("Balance on %s's SAVING Account: %s",
+                    tryUser.getFirstName(), saving.getBalancee()));
+            textAreaBottomHalf.append("\nPlease enter a valid amount");
+        }
+    }
+
+    private void confirmDepositButtonSavingsAction() {
         try {
             saving.deposit(Double.parseDouble(amountEnteredDeposit.getText()));
             textAreaBottomHalf.setText("");
@@ -390,7 +367,7 @@ public class GUI extends JFrame implements ActionListener {
                     tryUser.getFirstName(), checking.getBalancee()));
             textAreaBottomHalf.append(String.format("Balance on %s's SAVING Account: %s",
                     tryUser.getFirstName(), saving.getBalancee()));
-            textAreaBottomHalf.append(String.format(s,
+            textAreaBottomHalf.append(String.format("\nDeposited %s into Savings Account",
                     amountEnteredDeposit.getText()));
             Sound.playSound("Music/chaChing.wav");
         } catch (NumberFormatException z) {
@@ -473,24 +450,6 @@ public class GUI extends JFrame implements ActionListener {
         }
     }
 
-
-    // EFFECTS: prompts user to select chequing or savings account and returns it
-    private static Account selectAccount(Scanner scanner) {
-        int selection = 0;  // force entry into loop
-
-        while (!(selection == 1 || selection == 2)) {
-            System.out.println("Confirm entry of the account [1-2]\n"
-                    + "to make action on: ");
-            selection = scanner.nextInt();
-        }
-
-        if (selection == 1) {
-            return checking;
-        } else {
-            return saving;
-        }
-    }
-
     public static void guiAtmModel() {
         JPanel panel = new JPanel();
         JFrame frame = new JFrame();
@@ -503,15 +462,30 @@ public class GUI extends JFrame implements ActionListener {
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
         panel.setBackground(LIGHT_BLUE);
-        // unmodifiable "Welcome" text
-        welcomeLabel = new JLabel("Hello Jagmeet !  How are you today ?");
-        welcomeLabel.setBounds(200, 0, 250, 100);
-        panel.add(welcomeLabel);
-        // unmodifiable "Password" text
-        selectOptionsLabel = new JLabel("Please select from the following options:");
-        selectOptionsLabel.setBounds(10, 75, 250, 25);
-        panel.add(selectOptionsLabel);
-        // unmodifiable "Withdraw" button
+        guiAtmModelHelper(panel);
+        textAreaTopHalf = new JTextArea();
+        textAreaTopHalf.setEditable(false);
+        textAreaTopHalf.setBounds(20, 285, 550, 150);
+        panel.add(textAreaTopHalf);
+        textAreaBottomHalf = new JTextArea();
+        textAreaBottomHalf.setEditable(false);
+        textAreaBottomHalf.setBounds(20, 435, 550, 150);
+        panel.add(textAreaBottomHalf);
+        loadAccounts();
+        guiAtmModelHelper1();
+
+
+    }
+
+    private static void guiAtmModelHelper1() {
+        textAreaBottomHalf.append(String.format("Balance on %s's CHECKING Account: %s\n",
+                tryUser.getFirstName(), checking.getBalancee()));
+        textAreaBottomHalf.append(String.format("Balance on %s's SAVING Account: %s",
+                tryUser.getFirstName(), saving.getBalancee()));
+    }
+
+    private static void guiAtmModelHelper(JPanel panel) {
+        guiAtmModelHelpersHelper(panel);
         withdrawButton = new JButton("Withdraw : ");
         withdrawButton.setBounds(20, 105, 250, 25);
         withdrawButton.addActionListener(new GUI());
@@ -536,23 +510,19 @@ public class GUI extends JFrame implements ActionListener {
         exitButton.setBounds(20, 225, 250, 25);
         panel.add(exitButton);
         exitButton.addActionListener(new GUI());
-        textAreaTopHalf = new JTextArea();
-        textAreaTopHalf.setEditable(false);
-        textAreaTopHalf.setBounds(20, 285, 550, 150);
-        panel.add(textAreaTopHalf);
-        textAreaBottomHalf = new JTextArea();
-        textAreaBottomHalf.setEditable(false);
-        textAreaBottomHalf.setBounds(20, 435, 550, 150);
-        panel.add(textAreaBottomHalf);
-        loadAccounts();
-        textAreaBottomHalf.append(String.format("Balance on %s's CHECKING Account: %s\n",
-                tryUser.getFirstName(), checking.getBalancee()));
-        textAreaBottomHalf.append(String.format("Balance on %s's SAVING Account: %s",
-                tryUser.getFirstName(), saving.getBalancee()));
-
-
     }
 
+    private static void guiAtmModelHelpersHelper(JPanel panel) {
+        // unmodifiable "Welcome" text
+        welcomeLabel = new JLabel("Hello Jagmeet !  How are you today ?");
+        welcomeLabel.setBounds(200, 0, 250, 100);
+        panel.add(welcomeLabel);
+        // unmodifiable "Password" text
+        selectOptionsLabel = new JLabel("Please select from the following options:");
+        selectOptionsLabel.setBounds(10, 75, 250, 25);
+        panel.add(selectOptionsLabel);
+        // unmodifiable "Withdraw" button
+    }
 
     public static void withdrawPanel() {
         JPanel panel = new JPanel();
@@ -672,7 +642,6 @@ public class GUI extends JFrame implements ActionListener {
         confirmDepositButtonSavings.addActionListener(new GUI());
 
     }
-
 
     public static void checkingAccountDeposit() {
         JPanel panel = new JPanel();

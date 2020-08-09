@@ -21,3 +21,22 @@ I would be able to visualize what is actually going on under the hood.
 - As a user, I want to be able to logout
 - As a user, I want to be able to be able to save my accounts balances to a file.
 - As a user, I want to be able to optionally load my saved accounts from a file when the program starts.
+
+
+##Instruction For Grader
+
+- You can generate the first required event by first running the GUI in the UI package
+  - Typing in "1" as the username and "1" as the password
+  - This opens the options screen, and you are able to choose any of the options from deposit, withdraw, and transfer. 
+All these options relate to my "Multiple X's to Y" user story, where the multiple X's
+are the transactions that are created in the transaction class where (deposits/withdraws/transfers ==x) are generated. 
+After creation of the financial action, the transactions apply to Accounts (Accounts == Y) of the user logged into the 
+atm.
+- You can locate the audio component by going into the sound package for the method used, and the Music folder for the
+sound effects used for the ATM, you can alternatively just run the GUI and make a deposit, withdraw, and transfer to
+hear the different effects for each.
+- You can locate the visual component by running the GUI and a login interface will appear on 
+screen (follow first bullet point)
+- You can save the state of the application by clicking the save accounts button before exiting.
+- You can reload the state of the application by simply logging back into the GUI and the information will be
+- automatically retrieved.
