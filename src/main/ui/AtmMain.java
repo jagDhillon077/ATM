@@ -7,7 +7,7 @@ public class AtmMain {
         // creates new ATM GUI
         // new GUI();
         // creates new ATM
-        new ATM();
+        // new ATM();
 
 
 

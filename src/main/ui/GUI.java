@@ -1,8 +1,14 @@
 package ui;
 
+import atm.Account;
+import atm.Bank;
+import atm.UserInfo;
+import persistence.Reader;
+import persistence.Writer;
+import sound.Sound;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -11,23 +17,11 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Scanner;
-import javax.swing.JPanel;
 
-import java.io.File;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-
-import atm.Account;
-import atm.Bank;
-import atm.UserInfo;
-import persistence.Reader;
-import persistence.Writer;
-import sound.Sound;
-
+// creates a GUI for a bank ATM
 public class GUI extends JFrame implements ActionListener {
     //==========================================================================================
-    //==================================GUI Fields==============================================
+    //==================================JPanel Fields==============================================
     //==========================================================================================
     private static JPasswordField passwordInput;
     private static ImageIcon bankSymbol;
@@ -79,13 +73,13 @@ public class GUI extends JFrame implements ActionListener {
     private static final Account newSaving = new Account("Savings", 0.0);
     private static Bank bankName = new Bank("TD");
     private static UserInfo tryUser = bankName.newUser("Jagmeet", "Dhillon", "1", 1);
-    //private static Account
+
 
     public static void main(String[] args) {
-        // TODO Grader Instructions
         loginScreenGuiOnStart();
     }
 
+    // EFFECTS: login window for GUI
     private static void loginScreenGuiOnStart() {
         JPanel panel = new JPanel();
         JFrame frame = new JFrame();
@@ -107,6 +101,8 @@ public class GUI extends JFrame implements ActionListener {
         enterAmountLabel = new JLabel("Please Enter Amount");
     }
 
+    // REQUIRES: correct login username/password combination
+    // EFFECTS : displays welcome panel
     private static void welcome(JPanel panel) {
         // unmodifiable "Welcome Label"
         welcomeLabel = new JLabel("Welcome to ATM #0627");
@@ -154,6 +150,7 @@ public class GUI extends JFrame implements ActionListener {
         }
     }
 
+    // REQUIRES: IOException to be thrown
     // Initializes the new accounts made
     private static void init() {
         // creates a bank the ATM is associated with
@@ -167,6 +164,36 @@ public class GUI extends JFrame implements ActionListener {
         Scanner input = new Scanner(System.in);
     }
 
+    // REQUIRES: a button to be pressed
+    // EFFECTS : displays correct window corresponding to button press
+    public void actionPerformed(ActionEvent e) {
+        // creates a bank the ATM is associated with
+
+        if ((e.getSource() == button) || (e.getSource() == withdrawButton) || (e.getSource() == depositButton)
+                || (e.getSource() == transferButton) || (e.getSource() == saveAccountsButton)
+                || (e.getSource() == exitButton) || (e.getSource() == savingsAccountButtonDeposit)
+                || (e.getSource() == checkingAccountButtonDeposit) || (e.getSource() == savingsAccountButtonWithdraw)
+                || (e.getSource() == checkingAccountButtonWithdraw) || (e.getSource() == confirmDepositButtonSavings)) {
+            actionPerformedHelper(e);
+        } else if (e.getSource() == confirmDepositButtonChecking) {
+            confirmDepositButtonCheckingAction();
+        } else if (e.getSource() == confirmWithdrawButtonSavings) {
+            confirmWithdrawButtonSavingsAction();
+        } else if (e.getSource() == confirmWithdrawButtonChecking) {
+            confirmWithdrawButtonCheckingAction();
+        } else if (e.getSource() == savingsToCheckingAccountButtonTransfer) {
+            savingsToCheckingAccountButtonTransferAction();
+        } else if (e.getSource() == checkingToSavingsAccountButtonTransfer) {
+            checkingToSavingsAccountButtonTransferAction();
+        } else if (e.getSource() == confirmSavingsToCheckingAccountButtonTransfer) {
+            confirmSavingsToCheckingAccountButtonTransferAction();
+        } else if (e.getSource() == confirmCheckingToSavingsAccountButtonTransfer) {
+            confirmCheckingToSavingsAccountButtonTransferAction();
+        }
+    }
+
+    // REQUIRES: certain buttons to be pressed for this helper to be called
+    // EFFECTS: displays panel or does action if any of below buttons are pressed
     public void actionPerformedHelper(ActionEvent e) {
         if (e.getSource() == button) {
             loginButtonAction();
@@ -193,32 +220,8 @@ public class GUI extends JFrame implements ActionListener {
         }
     }
 
-    public void actionPerformed(ActionEvent e) {
-        // creates a bank the ATM is associated with
-
-        if ((e.getSource() == button) || (e.getSource() == withdrawButton) || (e.getSource() == depositButton)
-                || (e.getSource() == transferButton) || (e.getSource() == saveAccountsButton)
-                || (e.getSource() == exitButton) || (e.getSource() == savingsAccountButtonDeposit)
-                || (e.getSource() == checkingAccountButtonDeposit) || (e.getSource() == savingsAccountButtonWithdraw)
-                || (e.getSource() == checkingAccountButtonWithdraw) || (e.getSource() == confirmDepositButtonSavings)) {
-            actionPerformedHelper(e);
-        }  else if (e.getSource() == confirmDepositButtonChecking) {
-            confirmDepositButtonCheckingAction();
-        } else if (e.getSource() == confirmWithdrawButtonSavings) {
-            confirmWithdrawButtonSavingsAction();
-        } else if (e.getSource() == confirmWithdrawButtonChecking) {
-            confirmWithdrawButtonCheckingAction();
-        } else if (e.getSource() == savingsToCheckingAccountButtonTransfer) {
-            savingsToCheckingAccountButtonTransferAction();
-        } else if (e.getSource() == checkingToSavingsAccountButtonTransfer) {
-            checkingToSavingsAccountButtonTransferAction();
-        } else if (e.getSource() == confirmSavingsToCheckingAccountButtonTransfer) {
-            confirmSavingsToCheckingAccountButtonTransferAction();
-        } else if (e.getSource() == confirmCheckingToSavingsAccountButtonTransfer) {
-            confirmCheckingToSavingsAccountButtonTransferAction();
-        }
-    }
-
+    // REQUIRES: correct login username and password input text
+    // EFFECTS: displays GUI atm model or asks user to try a username password combination again
     private void loginButtonAction() {
         String userInputText = userInput.getText();
         String passwordInputText = passwordInput.getText();
@@ -234,182 +237,231 @@ public class GUI extends JFrame implements ActionListener {
         }
     }
 
+    // REQUIRES: amount > 0
+    // MODIFIES: checking and savings account balance
+    // EFFECTS: deposits amount to savings and withdraws amount from checking account
     private void confirmCheckingToSavingsAccountButtonTransferAction() {
-        if (Double.parseDouble(amountEnteredTransfer.getText()) <= checking.getBalancee()) {
-            checking.withdraw(Double.parseDouble(amountEnteredTransfer.getText()));
-            saving.deposit(Double.parseDouble(amountEnteredTransfer.getText()));
-            textAreaBottomHalf.setText("");
-            textAreaBottomHalf.append(String.format("Balance on %s's CHECKING Account: %s\n",
-                    tryUser.getFirstName(), checking.getBalancee()));
-            textAreaBottomHalf.append(String.format("Balance on %s's SAVING Account: %s",
-                    tryUser.getFirstName(), saving.getBalancee()));
-            textAreaBottomHalf.append(String.format("\nTransferred %s from "
-                            + "Checking to Savings Account",
-                    amountEnteredTransfer.getText()));
-            Sound.playSound("Music/transferSound.wav");
-        } else {
-            textAreaBottomHalf.setText("");
-            textAreaBottomHalf.append(String.format("Balance on %s's CHECKING Account: %s\n",
-                    tryUser.getFirstName(), checking.getBalancee()));
-            textAreaBottomHalf.append(String.format("Balance on %s's SAVING Account: %s",
-                    tryUser.getFirstName(), saving.getBalancee()));
-            textAreaBottomHalf.append(String.format("\n Unable to Transfer, "
-                            + "%s is greater than Checking account balance",
-                    amountEnteredTransfer.getText()));
+        try {
+            if (Double.parseDouble(amountEnteredTransfer.getText()) != 0) {
+                if (Double.parseDouble(amountEnteredTransfer.getText()) <= checking.getBalancee()) {
+                    checking.withdraw(Double.parseDouble(amountEnteredTransfer.getText()));
+                    saving.deposit(Double.parseDouble(amountEnteredTransfer.getText()));
+                    bottomHalfUpdateTransfer();
+                } else {
+                    bottomHalfTextFieldUpdate();
+                    textAreaBottomHalf.append(String.format("\n Unable to Transfer, "
+                                    + "%s is greater than account balance",
+                            amountEnteredTransfer.getText()));
+                }
+            } else {
+                bottomHalfTextFieldUpdate();
+                textAreaBottomHalf.append("\nAmount must be greater than 0");
+            }
+        } catch (NumberFormatException z) {
+            numberFormatExceptionGui();
         }
     }
 
+    // REQUIRES: amount > 0
+    // MODIFIES: savings and checking account balance
+    // EFFECTS: deposits amount to checking and withdraws amount from savings account
     private void confirmSavingsToCheckingAccountButtonTransferAction() {
-        if (Double.parseDouble(amountEnteredTransfer.getText()) <= saving.getBalancee()) {
-            saving.withdraw(Double.parseDouble(amountEnteredTransfer.getText()));
-            checking.deposit(Double.parseDouble(amountEnteredTransfer.getText()));
-            textAreaBottomHalf.setText("");
-            textAreaBottomHalf.append(String.format("Balance on %s's CHECKING Account: %s\n",
-                    tryUser.getFirstName(), checking.getBalancee()));
-            textAreaBottomHalf.append(String.format("Balance on %s's SAVING Account: %s",
-                    tryUser.getFirstName(), saving.getBalancee()));
-            textAreaBottomHalf.append(String.format("\nTransferred %s from "
-                            + "Savings to Checking Account",
-                    amountEnteredTransfer.getText()));
-            Sound.playSound("Music/transferSound.wav");
-        } else {
-            textAreaBottomHalf.setText("");
-            textAreaBottomHalf.append(String.format("Balance on %s's CHECKING Account: %s\n",
-                    tryUser.getFirstName(), checking.getBalancee()));
-            textAreaBottomHalf.append(String.format("Balance on %s's SAVING Account: %s",
-                    tryUser.getFirstName(), saving.getBalancee()));
-            textAreaBottomHalf.append(String.format("\n Unable to Transfer, "
-                            + "%s is greater than Saving account balance",
-                    amountEnteredTransfer.getText()));
+        try {
+            if (Double.parseDouble(amountEnteredTransfer.getText()) != 0) {
+                if (Double.parseDouble(amountEnteredTransfer.getText()) <= saving.getBalancee()) {
+                    saving.withdraw(Double.parseDouble(amountEnteredTransfer.getText()));
+                    checking.deposit(Double.parseDouble(amountEnteredTransfer.getText()));
+                    bottomHalfUpdateTransfer();
+                } else {
+                    bottomHalfTextFieldUpdate();
+                    textAreaBottomHalf.append(String.format("\n Unable to Transfer, "
+                                    + "%s is greater than account balance",
+                            amountEnteredTransfer.getText()));
+                }
+            } else {
+                bottomHalfTextFieldUpdate();
+                textAreaBottomHalf.append("\nAmount must be greater than 0");
+            }
+        } catch (NumberFormatException z) {
+            numberFormatExceptionGui();
         }
     }
 
+    // REQUIRES: amount > 0 && amount < checking account balance
+    // MODIFIES: checking balance
+    // EFFECTS: withdraws amount from checking account
+    private void confirmWithdrawButtonCheckingAction() {
+        try {
+            if (Double.parseDouble(amountEnteredWithdraw.getText()) != 0) {
+                if (Double.parseDouble(amountEnteredWithdraw.getText()) <= checking.getBalancee()) {
+                    checking.withdraw(Double.parseDouble(amountEnteredWithdraw.getText()));
+                    bottomHalfTextFieldUpdate();
+                    textAreaBottomHalf.append(String.format("\nWithdrew %s from Checking Account",
+                            amountEnteredWithdraw.getText()));
+                    Sound.playSound("Music/trimmedWithdrawSound.wav");
+                } else {
+                    bottomHalfTextFieldUpdate();
+                    textAreaBottomHalf.append("\n Unable to Withdraw, "
+                            + "amount is greater than account balance");
+                }
+            } else {
+                bottomHalfTextFieldUpdate();
+                textAreaBottomHalf.append("\nAmount must be greater than 0");
+            }
+        } catch (NumberFormatException z) {
+            numberFormatExceptionGui();
+        }
+    }
+
+    // REQUIRES: amount > 0 && amount < savings account balance
+    // MODIFIES: savings balance
+    // EFFECTS: withdraws amount from savings account
+    private void confirmWithdrawButtonSavingsAction() {
+        try {
+            if (Double.parseDouble(amountEnteredWithdraw.getText()) != 0) {
+                if (Double.parseDouble(amountEnteredWithdraw.getText()) <= saving.getBalancee()) {
+                    saving.withdraw(Double.parseDouble(amountEnteredWithdraw.getText()));
+                    bottomHalfTextFieldUpdate();
+                    textAreaBottomHalf.append(String.format("\nWithdrew %s from Savings Account",
+                            amountEnteredWithdraw.getText()));
+                    Sound.playSound("Music/trimmedWithdrawSound.wav");
+                } else {
+                    bottomHalfTextFieldUpdate();
+                    textAreaBottomHalf.append("\n Unable to Withdraw, "
+                            + "amount is greater than account balance");
+                }
+            } else {
+                bottomHalfTextFieldUpdate();
+                textAreaBottomHalf.append("\nAmount must be greater than 0");
+            }
+
+        } catch (NumberFormatException z) {
+            numberFormatExceptionGui();
+        }
+    }
+
+    // EFFECTS: updates bottom half of text area to show transfer has been complete
+    private void bottomHalfUpdateTransfer() {
+        bottomHalfTextFieldUpdate();
+        textAreaBottomHalf.append(String.format("\nTransfer of %s complete",
+                amountEnteredTransfer.getText()));
+        Sound.playSound("Music/transferSound.wav");
+    }
+
+    // EFFECTS: plays button sound and calls method for cheq to sav account transfer
     private void checkingToSavingsAccountButtonTransferAction() {
         Sound.playSound("Music/buttonSound.wav");
         checkingToSavingsAccountTransfer();
     }
 
+    // EFFECTS: plays button sound and calls method for sav to cheq account transfer
     private void savingsToCheckingAccountButtonTransferAction() {
         Sound.playSound("Music/buttonSound.wav");
         savingsToCheckingAccountTransfer();
     }
 
-    private void confirmWithdrawButtonCheckingAction() {
-        if (Double.parseDouble(amountEnteredWithdraw.getText()) <= checking.getBalancee()) {
-            checking.withdraw(Double.parseDouble(amountEnteredWithdraw.getText()));
-            textAreaBottomHalf.setText("");
-            textAreaBottomHalf.append(String.format("Balance on %s's CHECKING Account: %s\n",
-                    tryUser.getFirstName(), checking.getBalancee()));
-            textAreaBottomHalf.append(String.format("Balance on %s's SAVING Account: %s",
-                    tryUser.getFirstName(), saving.getBalancee()));
-            textAreaBottomHalf.append(String.format("\nWithdrew %s from Checking Account",
-                    amountEnteredWithdraw.getText()));
-            Sound.playSound("Music/trimmedWithdrawSound.wav");
-        } else {
-            textAreaBottomHalf.setText("");
-            textAreaBottomHalf.append(String.format("Balance on %s's CHECKING Account: %s\n",
-                    tryUser.getFirstName(), checking.getBalancee()));
-            textAreaBottomHalf.append(String.format("Balance on %s's SAVING Account: %s",
-                    tryUser.getFirstName(), saving.getBalancee()));
-            textAreaBottomHalf.append("\n Unable to Withdraw, "
-                            + "amount is greater than account balance");
-        }
+    // EFFECTS: clears bottom half text box and updates it with new account balances
+    private void bottomHalfTextFieldUpdate() {
+        textAreaBottomHalf.setText("");
+        textAreaBottomHalf.append(String.format("Balance on %s's CHECKING Account: %s\n",
+                tryUser.getFirstName(), checking.getBalancee()));
+        textAreaBottomHalf.append(String.format("Balance on %s's SAVING Account: %s",
+                tryUser.getFirstName(), saving.getBalancee()));
     }
 
-    private void confirmWithdrawButtonSavingsAction() {
-        if (Double.parseDouble(amountEnteredWithdraw.getText()) <= saving.getBalancee()) {
-            saving.withdraw(Double.parseDouble(amountEnteredWithdraw.getText()));
-            textAreaBottomHalf.setText("");
-            textAreaBottomHalf.append(String.format("Balance on %s's CHECKING Account: %s\n",
-                    tryUser.getFirstName(), checking.getBalancee()));
-            textAreaBottomHalf.append(String.format("Balance on %s's SAVING Account: %s",
-                    tryUser.getFirstName(), saving.getBalancee()));
-            textAreaBottomHalf.append(String.format("\nWithdrew %s from Savings Account",
-                    amountEnteredWithdraw.getText()));
-            Sound.playSound("Music/trimmedWithdrawSound.wav");
-        } else {
-            textAreaBottomHalf.setText("");
-            textAreaBottomHalf.append(String.format("Balance on %s's CHECKING Account: %s\n",
-                    tryUser.getFirstName(), checking.getBalancee()));
-            textAreaBottomHalf.append(String.format("Balance on %s's SAVING Account: %s",
-                    tryUser.getFirstName(), saving.getBalancee()));
-            textAreaBottomHalf.append("\n Unable to Withdraw, "
-                            + "amount is greater than account balance");
-        }
+    // REQUIRES: number format exception to be thrown
+    // EFFECTS: tells user to enter a valid amount
+    private void numberFormatExceptionGui() {
+        bottomHalfTextFieldUpdate();
+        textAreaBottomHalf.append("\nPlease enter a valid amount");
     }
 
+    // REQUIRES: amount > 0
+    // MODIFIES: cheq balance
+    // EFFECTS: deposits amount to cheq account
     private void confirmDepositButtonCheckingAction() {
         try {
-            checking.deposit(Double.parseDouble(amountEnteredDeposit.getText()));
-            textAreaBottomHalf.setText("");
-            textAreaBottomHalf.append(String.format("Balance on %s's CHECKING Account: %s\n",
-                    tryUser.getFirstName(), checking.getBalancee()));
-            textAreaBottomHalf.append(String.format("Balance on %s's SAVING Account: %s",
-                    tryUser.getFirstName(), saving.getBalancee()));
-            textAreaBottomHalf.append(String.format("\nDeposited %s into Checking Account",
-                    amountEnteredDeposit.getText()));
-            Sound.playSound("Music/chaChing.wav");
+            if ((Double.parseDouble(amountEnteredDeposit.getText())) != 0) {
+                checking.deposit(Double.parseDouble(amountEnteredDeposit.getText()));
+                bottomHalfTextFieldUpdate();
+                textAreaBottomHalf.append(String.format("\nDeposited %s into Checking Account",
+                        amountEnteredDeposit.getText()));
+                Sound.playSound("Music/chaChing.wav");
+            } else {
+                bottomHalfTextFieldUpdate();
+                textAreaBottomHalf.append("\n Amount must be greater than 0");
+            }
         } catch (NumberFormatException z) {
-            textAreaBottomHalf.setText("");
-            textAreaBottomHalf.append(String.format("Balance on %s's CHECKING Account: %s\n",
-                    tryUser.getFirstName(), checking.getBalancee()));
-            textAreaBottomHalf.append(String.format("Balance on %s's SAVING Account: %s",
-                    tryUser.getFirstName(), saving.getBalancee()));
-            textAreaBottomHalf.append("\nPlease enter a valid amount");
+            numberFormatExceptionGui();
         }
     }
 
+    // REQUIRES: amount > 0
+    // MODIFIES: savings balance
+    // EFFECTS: deposits amount to savings account
     private void confirmDepositButtonSavingsAction() {
         try {
-            saving.deposit(Double.parseDouble(amountEnteredDeposit.getText()));
-            textAreaBottomHalf.setText("");
-            textAreaBottomHalf.append(String.format("Balance on %s's CHECKING Account: %s\n",
-                    tryUser.getFirstName(), checking.getBalancee()));
-            textAreaBottomHalf.append(String.format("Balance on %s's SAVING Account: %s",
-                    tryUser.getFirstName(), saving.getBalancee()));
-            textAreaBottomHalf.append(String.format("\nDeposited %s into Savings Account",
-                    amountEnteredDeposit.getText()));
-            Sound.playSound("Music/chaChing.wav");
+            if ((Double.parseDouble(amountEnteredDeposit.getText())) != 0) {
+                saving.deposit(Double.parseDouble(amountEnteredDeposit.getText()));
+                bottomHalfTextFieldUpdate();
+                textAreaBottomHalf.append(String.format("\nDeposited %s into Savings Account",
+                        amountEnteredDeposit.getText()));
+                Sound.playSound("Music/chaChing.wav");
+            } else {
+                bottomHalfTextFieldUpdate();
+                textAreaBottomHalf.append("\n Amount must be greater than 0");
+            }
+
         } catch (NumberFormatException z) {
-            textAreaBottomHalf.setText("");
-            textAreaBottomHalf.append(String.format("Balance on %s's CHECKING Account: %s\n",
-                    tryUser.getFirstName(), checking.getBalancee()));
-            textAreaBottomHalf.append(String.format("Balance on %s's SAVING Account: %s",
-                    tryUser.getFirstName(), saving.getBalancee()));
-            textAreaBottomHalf.append("\nPlease enter a valid amount");
+            numberFormatExceptionGui();
         }
     }
 
+    // REQUIRES: checking withdraw button to be pushed
+    // EFFECTS: calls method to withdraw from checking account
     private void checkingAccountButtonWithdrawAction() {
         Sound.playSound("Music/buttonSound.wav");
         checkingAccountWithdraw();
     }
 
+    // REQUIRES: saving withdraw button to be pushed
+    // EFFECTS: calls method to withdraw from savings account
     private void savingsAccountButtonWithdrawAction() {
         Sound.playSound("Music/buttonSound.wav");
         savingsAccountWithdraw();
     }
 
+    // REQUIRES: checking Deposit button to be pushed
+    // EFFECTS: calls method to deposit to checking account
     private void checkingAccountButtonDepositAction() {
         Sound.playSound("Music/buttonSound.wav");
         checkingAccountDeposit();
     }
 
+    // REQUIRES: savings Deposit button to be pushed
+    // EFFECTS: calls method to deposit to savings account
     private void savingsAccountButtonDepositAction() {
         Sound.playSound("Music/buttonSound.wav");
         savingsAccountDeposit();
     }
 
+    // REQUIRES: exit button to be pushed
+    // EFFECTS: exits out of system
     private void exitButtonAction() {
         Sound.playSound("Music/buttonSound.wav");
         System.exit(0);
     }
 
+    // REQUIRES: save accounts button to be pushed
+    // EFFECTS: calls method to save account balances
     private void saveAccountsButtonAction() {
         Sound.playSound("Music/buttonSound.wav");
         saveAccounts();
     }
 
+    // REQUIRES: transfer button to be pushed
+    // MODIFIES: bottom half text
+    // EFFECTS: calls method to do a transfer
     private void transferButtonAction() {
         Sound.playSound("Music/buttonSound.wav");
         textAreaTopHalf.setText("");
@@ -418,6 +470,9 @@ public class GUI extends JFrame implements ActionListener {
         transferPanel();
     }
 
+    // REQUIRES: deposit button to be pushed
+    // MODIFIES: bottom half text
+    // EFFECTS: calls method to do a deposit
     private void depositButtonAction() {
         Sound.playSound("Music/buttonSound.wav");
         textAreaTopHalf.setText("");
@@ -426,6 +481,9 @@ public class GUI extends JFrame implements ActionListener {
         depositPanel();
     }
 
+    // REQUIRES: withdraw button to be pushed
+    // MODIFIES: bottom half text
+    // EFFECTS: calls method to do a withdraw
     private void withdrawButtonAction() {
         Sound.playSound("Music/buttonSound.wav");
         textAreaTopHalf.setText("");
@@ -450,6 +508,8 @@ public class GUI extends JFrame implements ActionListener {
         }
     }
 
+    // REQUIRES: correct username/password combination
+    // EFFECTS: opens the main interface of the ATM
     public static void guiAtmModel() {
         JPanel panel = new JPanel();
         JFrame frame = new JFrame();
@@ -477,13 +537,8 @@ public class GUI extends JFrame implements ActionListener {
 
     }
 
-    private static void guiAtmModelHelper1() {
-        textAreaBottomHalf.append(String.format("Balance on %s's CHECKING Account: %s\n",
-                tryUser.getFirstName(), checking.getBalancee()));
-        textAreaBottomHalf.append(String.format("Balance on %s's SAVING Account: %s",
-                tryUser.getFirstName(), saving.getBalancee()));
-    }
 
+    // 1st helper for guiAtmModel
     private static void guiAtmModelHelper(JPanel panel) {
         guiAtmModelHelpersHelper(panel);
         withdrawButton = new JButton("Withdraw : ");
@@ -512,6 +567,15 @@ public class GUI extends JFrame implements ActionListener {
         exitButton.addActionListener(new GUI());
     }
 
+    // 2nd helper for guiAtmModel
+    private static void guiAtmModelHelper1() {
+        textAreaBottomHalf.append(String.format("Balance on %s's CHECKING Account: %s\n",
+                tryUser.getFirstName(), checking.getBalancee()));
+        textAreaBottomHalf.append(String.format("Balance on %s's SAVING Account: %s",
+                tryUser.getFirstName(), saving.getBalancee()));
+    }
+
+    // 3rd helper for gui atm model
     private static void guiAtmModelHelpersHelper(JPanel panel) {
         // unmodifiable "Welcome" text
         welcomeLabel = new JLabel("Hello Jagmeet !  How are you today ?");
@@ -524,17 +588,10 @@ public class GUI extends JFrame implements ActionListener {
         // unmodifiable "Withdraw" button
     }
 
+    // REQUIRES: withdraw button to be pushed
+    // EFFECTS: opens an interface to withdraw
     public static void withdrawPanel() {
-        JPanel panel = new JPanel();
-        JFrame frame = new JFrame();
-
-        frame.setSize(new Dimension(280, 150));
-        frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        frame.setVisible(true);
-        frame.add(panel);
-        frame.setResizable(false);
-        frame.setLocation(940, 323);
-        panel.setBackground(LIGHT_BLUE);
+        JPanel panel = getjPanel();
 
         selectAccountLabelWithdraw = new JLabel("Please Select An Account To Withdraw From");
         selectAccountLabelWithdraw.setBounds(20, 20, 200, 40);
@@ -551,7 +608,9 @@ public class GUI extends JFrame implements ActionListener {
         amountEnteredWithdraw.setBounds(100, 100, 100, 100);
     }
 
-    public static void savingsAccountWithdraw() {
+
+    // EFFECTS: creates default size panel for all the financial transactions
+    private static JPanel getjPanel() {
         JPanel panel = new JPanel();
         JFrame frame = new JFrame();
 
@@ -562,6 +621,14 @@ public class GUI extends JFrame implements ActionListener {
         frame.setResizable(false);
         frame.setLocation(940, 323);
         panel.setBackground(LIGHT_BLUE);
+        return panel;
+    }
+
+
+    // EFFECTS: opens an interface to withdraw from savings
+    public static void savingsAccountWithdraw() {
+        JPanel panel = getjPanel();
+
         panel.add(enterAmountLabel);
         panel.add(amountEnteredWithdraw);
         savingAccountExplanationLabel = new JLabel("This will be withdrawn from your savings account");
@@ -571,17 +638,10 @@ public class GUI extends JFrame implements ActionListener {
         confirmWithdrawButtonSavings.addActionListener(new GUI());
     }
 
+    // EFFECTS: open and interface to withdraw from checking
     public static void checkingAccountWithdraw() {
-        JPanel panel = new JPanel();
-        JFrame frame = new JFrame();
+        JPanel panel = getjPanel();
 
-        frame.setSize(new Dimension(280, 150));
-        frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        frame.setVisible(true);
-        frame.add(panel);
-        frame.setResizable(false);
-        frame.setLocation(940, 323);
-        panel.setBackground(LIGHT_BLUE);
         panel.add(enterAmountLabel);
         panel.add(amountEnteredWithdraw);
         checkingAccountExplanationLabel = new JLabel("This will be withdrawn from your checking account");
@@ -592,17 +652,10 @@ public class GUI extends JFrame implements ActionListener {
 
     }
 
+    // REQUIRES: deposit button to be pushed
+    // EFFECTS: opens an interface to deposit
     public static void depositPanel() {
-        JPanel panel = new JPanel();
-        JFrame frame = new JFrame();
-
-        frame.setSize(new Dimension(280, 150));
-        frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        frame.setVisible(true);
-        frame.add(panel);
-        frame.setResizable(false);
-        frame.setLocation(940, 323);
-        panel.setBackground(LIGHT_BLUE);
+        JPanel panel = getjPanel();
 
         selectAccountLabelDeposit = new JLabel("Please Select An Account To Deposit Too");
         selectAccountLabelDeposit.setBounds(20, 20, 200, 40);
@@ -618,24 +671,16 @@ public class GUI extends JFrame implements ActionListener {
         checkingAccountButtonDeposit.addActionListener(new GUI());
         amountEnteredDeposit = new JTextField(10);
         amountEnteredDeposit.setBounds(100, 100, 100, 100);
-        //panel.add(amountEnteredDeposit);
 
     }
 
+    // EFFECTS: creates panel to Deposit to savings
     public static void savingsAccountDeposit() {
-        JPanel panel = new JPanel();
-        JFrame frame = new JFrame();
+        JPanel panel = getjPanel();
 
-        frame.setSize(new Dimension(280, 150));
-        frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        frame.setVisible(true);
-        frame.add(panel);
-        frame.setResizable(false);
-        frame.setLocation(940, 323);
-        panel.setBackground(LIGHT_BLUE);
         panel.add(enterAmountLabel);
         panel.add(amountEnteredDeposit);
-        savingAccountExplanationLabel = new JLabel("This will be deposited in the checking account");
+        savingAccountExplanationLabel = new JLabel("This will be deposited in the savings account");
         panel.add(savingAccountExplanationLabel);
         confirmDepositButtonSavings = new JButton("Make Deposit");
         panel.add(confirmDepositButtonSavings);
@@ -643,17 +688,10 @@ public class GUI extends JFrame implements ActionListener {
 
     }
 
+    // EFFECTS: creates panel to Deposit to checking
     public static void checkingAccountDeposit() {
-        JPanel panel = new JPanel();
-        JFrame frame = new JFrame();
+        JPanel panel = getjPanel();
 
-        frame.setSize(new Dimension(280, 150));
-        frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        frame.setVisible(true);
-        frame.add(panel);
-        frame.setResizable(false);
-        frame.setLocation(940, 323);
-        panel.setBackground(LIGHT_BLUE);
         panel.add(enterAmountLabel);
         panel.add(amountEnteredDeposit);
         checkingAccountExplanationLabel = new JLabel("This will be deposited in the checking account");
@@ -665,17 +703,9 @@ public class GUI extends JFrame implements ActionListener {
 
     }
 
+    // EFFECTS: opens a transfer panel
     public static void transferPanel() {
-        JPanel panel = new JPanel();
-        JFrame frame = new JFrame();
-
-        frame.setSize(new Dimension(280, 150));
-        frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        frame.setVisible(true);
-        frame.add(panel);
-        frame.setResizable(false);
-        frame.setLocation(940, 323);
-        panel.setBackground(LIGHT_BLUE);
+        JPanel panel = getjPanel();
 
         selectAccountLabelTransfer = new JLabel("Please Select A Transfer Method");
         selectAccountLabelTransfer.setBounds(20, 20, 200, 40);
@@ -693,17 +723,10 @@ public class GUI extends JFrame implements ActionListener {
         amountEnteredTransfer.setBounds(100, 100, 100, 100);
     }
 
+    // EFFECTS: opens a transfer panel from savings to checking
     public static void savingsToCheckingAccountTransfer() {
-        JPanel panel = new JPanel();
-        JFrame frame = new JFrame();
+        JPanel panel = getjPanel();
 
-        frame.setSize(new Dimension(280, 150));
-        frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        frame.setVisible(true);
-        frame.add(panel);
-        frame.setResizable(false);
-        frame.setLocation(940, 323);
-        panel.setBackground(LIGHT_BLUE);
         panel.add(enterAmountLabel);
         panel.add(amountEnteredTransfer);
         transferAccountExplanationLabel = new JLabel("Transfer money from savings"
@@ -714,17 +737,10 @@ public class GUI extends JFrame implements ActionListener {
         confirmSavingsToCheckingAccountButtonTransfer.addActionListener(new GUI());
     }
 
+    // EFFECTS: opens a transfer panel from checking to savings
     public static void checkingToSavingsAccountTransfer() {
-        JPanel panel = new JPanel();
-        JFrame frame = new JFrame();
+        JPanel panel = getjPanel();
 
-        frame.setSize(new Dimension(280, 150));
-        frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        frame.setVisible(true);
-        frame.add(panel);
-        frame.setResizable(false);
-        frame.setLocation(940, 323);
-        panel.setBackground(LIGHT_BLUE);
         panel.add(enterAmountLabel);
         panel.add(amountEnteredTransfer);
         transferAccountExplanationLabel = new JLabel("Transfer money from checking"

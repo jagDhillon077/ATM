@@ -68,10 +68,10 @@ public class Account implements Saveable {
 
         // prints message describing all the account information.
         // Source - https://matthew-brett.github.io/teaching/string_formatting.html
-        System.out.printf(
-                "Your %s account has been created with %s bank "
-                        + "with %s balance and a UUID of %s.\n\n",
-                type, bankName, balance, uuid);
+//        System.out.printf(
+//                "Your %s account has been created with %s bank "
+//                        + "with %s balance and a UUID of %s.\n\n",
+//                type, bankName, balance, uuid);
 
     }
 
