@@ -175,7 +175,7 @@ public class Account implements Saveable {
         this.transactions.add(newTransaction);
     }
 
-    public double getBalancee() {
+    public double getSavedBalance() {
         return balance;
     }
 

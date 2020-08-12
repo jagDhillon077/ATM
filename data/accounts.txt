@@ -1,2 +1,2 @@
-Checking,250.0
+Checking,0.0
 Savings,0.0

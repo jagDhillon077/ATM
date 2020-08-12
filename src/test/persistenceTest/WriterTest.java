@@ -41,10 +41,10 @@ class WriterTest {
         try {
             List<Account> accounts = Reader.readAccounts(new File(TEST_FILE));
             Account chequing = accounts.get(0);
-            assertEquals(123.56, chequing.getBalancee());
+            assertEquals(123.56, chequing.getSavedBalance());
 
             Account savings = accounts.get(1);
-            assertEquals(435.23, savings.getBalancee());
+            assertEquals(435.23, savings.getSavedBalance());
 
         } catch (IOException e) {
             fail("IOException should not have been thrown");

@@ -21,10 +21,10 @@ class ReaderTest {
         try {
             List<Account> accounts = Reader.readAccounts(new File("./data/testAccounts.txt"));
             Account chequing = accounts.get(0);
-            assertEquals(123.56, chequing.getBalancee());
+            assertEquals(123.56, chequing.getSavedBalance());
 
             Account savings = accounts.get(1);
-            assertEquals(435.23, savings.getBalancee());
+            assertEquals(435.23, savings.getSavedBalance());
 
         } catch (IOException e) {
             fail("IOException should not have been thrown");
@@ -36,10 +36,10 @@ class ReaderTest {
         try {
             List<Account> accounts = Reader.readAccounts(new File("./data/testAccounts2.txt"));
             Account chequing = accounts.get(0);
-            assertEquals(10000.0, chequing.getBalancee());
+            assertEquals(10000.0, chequing.getSavedBalance());
 
             Account savings = accounts.get(1);
-            assertEquals(9000.0, savings.getBalancee());
+            assertEquals(9000.0, savings.getSavedBalance());
 
         } catch (IOException e) {
             fail("IOException should not have been thrown");
@@ -53,7 +53,7 @@ class ReaderTest {
             List<Account> accounts = Reader.readAccounts(new File("./data/testAccounts2.txt"));
             try {
                 Account savings = accounts.get(3);
-                assertEquals(0, savings.getBalancee());
+                assertEquals(0, savings.getSavedBalance());
             } catch (IndexOutOfBoundsException I) { //expected }
             }
         } catch (IOException e) {

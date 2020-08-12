@@ -56,3 +56,19 @@ will be applied to the transaction however if the user tries to withdraw, amount
 to the withdraw function.
 To locate the tests please open the test folder > atmTest > AccountTest > and it will be located in between the "Phase 
 4 Task 2" block located at the top.
+
+- Phase 4 Task 3: In the GUI class, there were multiple occurrences of copied and pasted code so I decided to refactor 
+it all into 1 method in order to lower cohesion, increase coupling, and increases the level of SPOC 
+(singular point of control). 
+- 4 Different Methods were refactored:
+- getjPanel() (Line 613) was refactored in 8 different occurrences:
+   - List of occurrences  for getjPanel 630, 643, 658, 679, 693, 708, 728, 742
+- bottomHalfTextFieldUpdate() was refactored in 16 different occurrences:
+   - List of occurrences for bottomHalfTextFieldUpdate() 251, 257, 276, 282, 298, 303, 308, 324, 329, 334, 345, 375, 
+   386, 391, 406, 411
+- numberFormatExceptionGui() was refactored in 6 different occurrences:
+   - List of occurrences for numberFormatExceptionGui() 261, 286, 312, 339, 395, 416
+- playSound(String soundName) was refactored in into a separate class with 17 different occurrences.
+   - List of occurrences for playSound(String soundName) 232, 301, 327, 348, 353, 359, 389, 409, 423, 430, 437, 444, 
+   451, 458, 466, 477, 488
+   

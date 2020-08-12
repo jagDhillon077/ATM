@@ -243,7 +243,7 @@ public class GUI extends JFrame implements ActionListener {
     private void confirmCheckingToSavingsAccountButtonTransferAction() {
         try {
             if (Double.parseDouble(amountEnteredTransfer.getText()) != 0) {
-                if (Double.parseDouble(amountEnteredTransfer.getText()) <= checking.getBalancee()) {
+                if (Double.parseDouble(amountEnteredTransfer.getText()) <= checking.getSavedBalance()) {
                     checking.withdraw(Double.parseDouble(amountEnteredTransfer.getText()));
                     saving.deposit(Double.parseDouble(amountEnteredTransfer.getText()));
                     bottomHalfUpdateTransfer();
@@ -268,7 +268,7 @@ public class GUI extends JFrame implements ActionListener {
     private void confirmSavingsToCheckingAccountButtonTransferAction() {
         try {
             if (Double.parseDouble(amountEnteredTransfer.getText()) != 0) {
-                if (Double.parseDouble(amountEnteredTransfer.getText()) <= saving.getBalancee()) {
+                if (Double.parseDouble(amountEnteredTransfer.getText()) <= saving.getSavedBalance()) {
                     saving.withdraw(Double.parseDouble(amountEnteredTransfer.getText()));
                     checking.deposit(Double.parseDouble(amountEnteredTransfer.getText()));
                     bottomHalfUpdateTransfer();
@@ -293,7 +293,7 @@ public class GUI extends JFrame implements ActionListener {
     private void confirmWithdrawButtonCheckingAction() {
         try {
             if (Double.parseDouble(amountEnteredWithdraw.getText()) != 0) {
-                if (Double.parseDouble(amountEnteredWithdraw.getText()) <= checking.getBalancee()) {
+                if (Double.parseDouble(amountEnteredWithdraw.getText()) <= checking.getSavedBalance()) {
                     checking.withdraw(Double.parseDouble(amountEnteredWithdraw.getText()));
                     bottomHalfTextFieldUpdate();
                     textAreaBottomHalf.append(String.format("\nWithdrew %s from Checking Account",
@@ -319,7 +319,7 @@ public class GUI extends JFrame implements ActionListener {
     private void confirmWithdrawButtonSavingsAction() {
         try {
             if (Double.parseDouble(amountEnteredWithdraw.getText()) != 0) {
-                if (Double.parseDouble(amountEnteredWithdraw.getText()) <= saving.getBalancee()) {
+                if (Double.parseDouble(amountEnteredWithdraw.getText()) <= saving.getSavedBalance()) {
                     saving.withdraw(Double.parseDouble(amountEnteredWithdraw.getText()));
                     bottomHalfTextFieldUpdate();
                     textAreaBottomHalf.append(String.format("\nWithdrew %s from Savings Account",
@@ -364,9 +364,9 @@ public class GUI extends JFrame implements ActionListener {
     private void bottomHalfTextFieldUpdate() {
         textAreaBottomHalf.setText("");
         textAreaBottomHalf.append(String.format("Balance on %s's CHECKING Account: %s\n",
-                tryUser.getFirstName(), checking.getBalancee()));
+                tryUser.getFirstName(), checking.getSavedBalance()));
         textAreaBottomHalf.append(String.format("Balance on %s's SAVING Account: %s",
-                tryUser.getFirstName(), saving.getBalancee()));
+                tryUser.getFirstName(), saving.getSavedBalance()));
     }
 
     // REQUIRES: number format exception to be thrown
@@ -570,9 +570,9 @@ public class GUI extends JFrame implements ActionListener {
     // 2nd helper for guiAtmModel
     private static void guiAtmModelHelper1() {
         textAreaBottomHalf.append(String.format("Balance on %s's CHECKING Account: %s\n",
-                tryUser.getFirstName(), checking.getBalancee()));
+                tryUser.getFirstName(), checking.getSavedBalance()));
         textAreaBottomHalf.append(String.format("Balance on %s's SAVING Account: %s",
-                tryUser.getFirstName(), saving.getBalancee()));
+                tryUser.getFirstName(), saving.getSavedBalance()));
     }
 
     // 3rd helper for gui atm model
