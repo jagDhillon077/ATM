@@ -40,3 +40,19 @@ screen (follow first bullet point)
 - You can save the state of the application by clicking the save accounts button before exiting.
 - You can reload the state of the application by simply logging back into the GUI and the information will be
 - automatically retrieved.
+
+
+## Phase 4 Tasks Below:
+- Phase 4 task 2: I chose option 1 *Test and design a class that is robust.  
+You must have at least one method that throws a checked exception.  You must have one test 
+for the case where the exception is expected and another where the exception is not expected.*
+
+The main class involved in this task is Account and UserInfo, and the main method involved is located in the class 
+UserInfo addAcctTransaction().
+This method adds a transaction to the account that must be strictly greater than 0. Otherwise an 
+OnlyPositiveException will be thrown asking for only positive numbers in the input. The exclusions of using 
+negative numbers was used to avoid confusion, so if a user decided to deposit, the positive amount
+will be applied to the transaction however if the user tries to withdraw, amount*(-1) will be applied
+to the withdraw function.
+To locate the tests please open the test folder > atmTest > AccountTest > and it will be located in between the "Phase 
+4 Task 2" block located at the top.

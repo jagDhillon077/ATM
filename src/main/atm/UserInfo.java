@@ -1,5 +1,7 @@
 package atm;
 
+import exceptions.OnlyPositiveException;
+
 import java.sql.SQLOutput;
 import java.util.ArrayList;
 // Information about the user logging into the ATM application
@@ -119,8 +121,12 @@ public class UserInfo {
     // REQUIRES: transaction
     // MODIFIES this
     // EFFECTS: Adds transaction to selected account
-    public void addAcctTransaction(int acct, double amount) {
-        this.accounts.get(acct).addTransaction(amount);
+    public void addAcctTransaction(int acct, double amount) throws OnlyPositiveException {
+        if (amount <= 0) {
+            throw new OnlyPositiveException();
+        } else {
+            this.accounts.get(acct).addTransaction(amount);
+        }
     }
 
 }
