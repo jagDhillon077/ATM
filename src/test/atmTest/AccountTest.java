@@ -24,8 +24,8 @@ public class AccountTest {
                 "jagmdhi", bankName, 111111);
         Account account = new Account("Savings",0,bankName,userInfo,"TD");
         try {
-            userInfo.addAcctTransaction(0, 500);
-            assertEquals(500 , userInfo.getAcctBalance(0));
+            userInfo.addAcctTransaction(0, -500);
+            fail("Exception should have been thrown");
         } catch (OnlyPositiveException p) {
             System.out.println("Only positive Numbers Please");
             // this exception is supposed to be thrown
