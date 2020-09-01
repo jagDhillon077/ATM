@@ -98,7 +98,7 @@ public class ATM {
 //            checking = accounts.get(0);
 //            saving = accounts.get(1);
 //        } catch (IOException e) {
-//            init();
+//            //////init();
 //        }
 //    }
 //
