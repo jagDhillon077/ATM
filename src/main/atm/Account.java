@@ -32,6 +32,7 @@ public class Account implements Saveable {
     // the balance of the account
     private int initialBalance;
     private int initial;
+    private int initial2;
     //=========================================================
 
 
