@@ -31,6 +31,7 @@ public class Account implements Saveable {
     private String name = "";
     // the balance of the account
     private int initialBalance;
+    private int initial;
     //=========================================================
 
 
