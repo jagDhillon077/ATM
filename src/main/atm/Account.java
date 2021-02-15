@@ -33,6 +33,7 @@ public class Account implements Saveable {
     private int initialBalance;
     private int initial;
     private int initial2;
+    private int initial3;
     //=========================================================
 
 
